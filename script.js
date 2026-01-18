@@ -78,7 +78,7 @@ class SwipableUI {
 
     handleSwipe() {
         const swipeDistance = this.touchStartY - this.touchEndY;
-        const minSwipeDistance = 50;
+        const minSwipeDistance = 30;
 
         if (Math.abs(swipeDistance) < minSwipeDistance) return;
 
