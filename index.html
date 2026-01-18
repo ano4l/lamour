@@ -277,9 +277,16 @@
                     <div class="photobooth-container">
                         <div class="photobooth-canvas-wrapper">
                             <canvas id="photobooth-canvas" width="400" height="600"></canvas>
-                            <div class="template-overlay">
-                                <div class="template-text">L'AMOUR</div>
-                                <div class="template-date">02.14.26</div>
+                            <video id="camera-video" style="display: none;"></video>
+                            <div class="camera-overlay" id="camera-overlay" style="display: none;">
+                                <div class="camera-frame"></div>
+                                <button class="capture-btn" id="capture-btn">
+                                    <span class="btn-icon">📸</span>
+                                    CAPTURE
+                                </button>
+                                <button class="close-camera-btn" id="close-camera-btn">
+                                    <span class="btn-icon">✕</span>
+                                </button>
                             </div>
                         </div>
                         

@@ -16,6 +16,12 @@ class SwipableUI {
         this.photoboothImage = null;
         this.imageRotation = 0;
         this.imageFlipped = false;
+        this.cameraStream = null;
+        this.isCameraActive = false;
+        this.logos = {
+            top: null,
+            bottom: null
+        };
         
         this.init();
     }
@@ -89,21 +95,67 @@ class SwipableUI {
         if (this.isTransitioning || sectionIndex === this.currentSection) return;
         
         this.isTransitioning = true;
+        
+        // Update current section
         this.currentSection = sectionIndex;
-
-        // Update sections
+        
+        // Update wrapper transform with natural easing
+        const wrapper = document.querySelector('.swipable-wrapper');
+        wrapper.style.transform = `translateY(-${sectionIndex * 100}vh)`;
+        
+        // Update section states with staggered timing
         document.querySelectorAll('.section').forEach((section, index) => {
-            section.classList.toggle('active', index === sectionIndex);
+            if (index === sectionIndex) {
+                section.classList.add('active');
+                // Stagger animation for elements within the active section
+                this.animateSectionElements(section);
+            } else {
+                section.classList.remove('active');
+            }
         });
-
+        
         // Update navigation dots
-        document.querySelectorAll('.dot').forEach((dot, index) => {
-            dot.classList.toggle('active', index === sectionIndex);
-        });
-
+        this.updateNavigationDots();
+        
+        // Reset transition flag after animation completes
         setTimeout(() => {
             this.isTransitioning = false;
-        }, 500);
+        }, 600);
+    }
+
+    animateSectionElements(section) {
+        // Animate section header first
+        const header = section.querySelector('.section-header');
+        if (header) {
+            header.style.animation = 'none';
+            setTimeout(() => {
+                header.style.animation = 'fadeInUpNatural 0.6s ease-out';
+            }, 50);
+        }
+
+        // Stagger animate other elements
+        const elements = section.querySelectorAll('.poll-card, .prompt-container, .redflags-container, .music-container, .photobooth-container');
+        elements.forEach((el, index) => {
+            el.style.animation = 'none';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                el.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, 100 + (index * 100));
+        });
+    }
+
+    updateNavigationDots() {
+        document.querySelectorAll('.dot').forEach((dot, index) => {
+            if (index === this.currentSection) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
     }
 
     setupNavigation() {
@@ -383,6 +435,10 @@ class SwipableUI {
         const resetBtn = document.getElementById('reset-btn');
         const downloadBtn = document.getElementById('download-btn');
         const shareBtn = document.getElementById('share-btn');
+        const video = document.getElementById('camera-video');
+        const cameraOverlay = document.getElementById('camera-overlay');
+        const captureBtn = document.getElementById('capture-btn');
+        const closeCameraBtn = document.getElementById('close-camera-btn');
 
         // Initialize with template
         this.loadTemplate(ctx, canvas);
@@ -400,13 +456,19 @@ class SwipableUI {
             }
         });
 
-        // Camera button (for mobile devices)
+        // Camera button
         cameraBtn.addEventListener('click', () => {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                this.showNotification('Camera access coming soon!', 'info');
-            } else {
-                this.showNotification('Camera not available on this device', 'error');
-            }
+            this.startCamera(video, cameraOverlay);
+        });
+
+        // Capture button
+        captureBtn.addEventListener('click', () => {
+            this.capturePhoto(video, canvas, ctx, cameraOverlay);
+        });
+
+        // Close camera button
+        closeCameraBtn.addEventListener('click', () => {
+            this.stopCamera(video, cameraOverlay);
         });
 
         // Edit controls
@@ -432,32 +494,223 @@ class SwipableUI {
         });
     }
 
+    async startCamera(video, cameraOverlay) {
+        try {
+            // Request camera access
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    facingMode: 'user',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                } 
+            });
+            
+            this.cameraStream = stream;
+            video.srcObject = stream;
+            video.style.display = 'block';
+            cameraOverlay.style.display = 'flex';
+            this.isCameraActive = true;
+            
+            this.showNotification('Camera started! Position yourself and tap CAPTURE', 'info');
+        } catch (error) {
+            console.error('Camera access error:', error);
+            this.showNotification('Camera access denied or not available', 'error');
+        }
+    }
+
+    stopCamera(video, cameraOverlay) {
+        if (this.cameraStream) {
+            this.cameraStream.getTracks().forEach(track => track.stop());
+            this.cameraStream = null;
+        }
+        
+        video.style.display = 'none';
+        cameraOverlay.style.display = 'none';
+        this.isCameraActive = false;
+        
+        this.showNotification('Camera closed', 'info');
+    }
+
+    capturePhoto(video, canvas, ctx, cameraOverlay) {
+        // Create a temporary canvas to capture the video frame
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = video.videoWidth;
+        tempCanvas.height = video.videoHeight;
+        const tempCtx = tempCanvas.getContext('2d');
+        
+        // Draw the current video frame
+        tempCtx.drawImage(video, 0, 0);
+        
+        // Convert to image
+        tempCanvas.toBlob((blob) => {
+            const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+            this.loadImage(file, ctx, canvas);
+            this.stopCamera(video, cameraOverlay);
+        }, 'image/jpeg');
+    }
+
     loadTemplate(ctx, canvas) {
-        // Create gradient background similar to template
-        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, '#8B5CF6');
-        gradient.addColorStop(1, '#EC4899');
-        ctx.fillStyle = gradient;
+        // Clear canvas
+        ctx.fillStyle = '#FFF5EE';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Add L'AMOUR text at top
-        ctx.fillStyle = 'white';
-        ctx.font = 'bold 48px Inter';
+        // Draw pink gradient background at top
+        const topGradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.3);
+        topGradient.addColorStop(0, '#FFB6C1');
+        topGradient.addColorStop(1, 'transparent');
+        ctx.fillStyle = topGradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height * 0.3);
+
+        // Left section background (cream/white)
+        ctx.fillStyle = '#FFF5EE';
+        ctx.fillRect(0, 0, canvas.width * 0.45, canvas.height);
+
+        // Draw vertical divider line
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(canvas.width * 0.45, 0);
+        ctx.lineTo(canvas.width * 0.45, canvas.height);
+        ctx.stroke();
+
+        // Left side text - L'AMOUR
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 32px Inter';
         ctx.textAlign = 'center';
-        ctx.fillText('L\'AMOUR', canvas.width / 2, 80);
-
-        // Add date at bottom
-        ctx.font = 'bold 24px Inter';
-        ctx.fillText('02.14.26', canvas.width / 2, canvas.height - 40);
-
-        // Add placeholder for photo area
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-        ctx.fillRect(50, 120, canvas.width - 100, canvas.height - 240);
+        ctx.fillText("L'AMOUR", canvas.width * 0.225, 50);
         
-        // Add placeholder text
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-        ctx.font = '16px Inter';
-        ctx.fillText('Your photo goes here', canvas.width / 2, canvas.height / 2);
+        ctx.font = '14px Inter';
+        ctx.fillText("VALENTINES EVENT", canvas.width * 0.225, 70);
+
+        // Add logos placeholder (you'll need actual logo images)
+        ctx.fillStyle = '#FF1493';
+        ctx.font = 'bold 16px Inter';
+        ctx.fillText("SORAH", canvas.width * 0.225, 110);
+        ctx.fillText("L&T", canvas.width * 0.225, 150);
+
+        // Photo frame area on left (empty space for photo)
+        const photoFrameX = canvas.width * 0.05;
+        const photoFrameY = canvas.height * 0.45;
+        const photoFrameWidth = canvas.width * 0.35;
+        const photoFrameHeight = canvas.height * 0.35;
+        
+        // Draw photo frame border
+        ctx.strokeStyle = '#FFB6C1';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(photoFrameX, photoFrameY, photoFrameWidth, photoFrameHeight);
+
+        // Add decorative heart at bottom of frame
+        ctx.fillStyle = '#FF1493';
+        ctx.font = '24px Arial';
+        ctx.fillText('💗', photoFrameX + photoFrameWidth - 20, photoFrameY + photoFrameHeight + 20);
+
+        // Right side text
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 20px Inter';
+        ctx.fillText('02.14.26  15:00', canvas.width * 0.725, 50);
+        
+        ctx.font = '12px Inter';
+        ctx.fillText('SATURDAY TILL LATE', canvas.width * 0.725, 70);
+
+        // Handwritten style text
+        ctx.font = 'italic 18px Georgia';
+        ctx.fillText('Do you HAVE', canvas.width * 0.725, 120);
+        ctx.fillText('A VALENTINE?', canvas.width * 0.725, 145);
+
+        // Event details on right
+        ctx.font = 'bold 14px Inter';
+        ctx.fillText('LIMITED TICKETS', canvas.width * 0.725, 190);
+        
+        ctx.font = '12px Inter';
+        ctx.fillText('99 JUTA ST, BRAAM', canvas.width * 0.725, 215);
+        ctx.fillText('SORAH X', canvas.width * 0.725, 240);
+        ctx.fillText('L&T EVENTS', canvas.width * 0.725, 260);
+
+        // Store photo frame coordinates for later use
+        this.photoFrameCoords = {
+            x: photoFrameX,
+            y: photoFrameY,
+            width: photoFrameWidth,
+            height: photoFrameHeight
+        };
+
+        this.templateLoaded = true;
+    }
+
+    loadLogosAndRedraw(ctx, canvas) {
+        if (!this.templateLoaded) return;
+
+        // Redraw the base template
+        this.loadTemplate(ctx, canvas);
+
+        // Load and draw logos (you'll need to provide the logo URLs or base64 data)
+        this.drawLogos(ctx, canvas);
+    }
+
+    drawLogos(ctx, canvas) {
+        // Logo positions based on your template
+        // Top logo position
+        const topLogoX = canvas.width / 2 - 60;
+        const topLogoY = 100;
+        
+        // Bottom logo position  
+        const bottomLogoX = canvas.width / 2 - 60;
+        const bottomLogoY = canvas.height - 80;
+
+        // Draw logos if loaded, otherwise show placeholders
+        if (this.logos.top) {
+            ctx.drawImage(this.logos.top, topLogoX, topLogoY, 120, 40);
+        } else {
+            // Placeholder for top logo
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.fillRect(topLogoX, topLogoY, 120, 40);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.font = '12px Inter';
+            ctx.fillText('TOP LOGO', canvas.width / 2, topLogoY + 25);
+        }
+
+        if (this.logos.bottom) {
+            ctx.drawImage(this.logos.bottom, bottomLogoX, bottomLogoY, 120, 40);
+        } else {
+            // Placeholder for bottom logo
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.fillRect(bottomLogoX, bottomLogoY, 120, 40);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.fillText('BOTTOM LOGO', canvas.width / 2, bottomLogoY + 25);
+        }
+    }
+
+    loadLogos(topLogoSrc, bottomLogoSrc) {
+        // Load top logo
+        if (topLogoSrc) {
+            const topImg = new Image();
+            topImg.onload = () => {
+                this.logos.top = topImg;
+                // Redraw canvas if there's a photo loaded
+                if (this.photoboothImage) {
+                    const canvas = document.getElementById('photobooth-canvas');
+                    const ctx = canvas.getContext('2d');
+                    this.drawImage(ctx, canvas, this.photoboothImage);
+                }
+            };
+            topImg.src = topLogoSrc;
+        }
+
+        // Load bottom logo
+        if (bottomLogoSrc) {
+            const bottomImg = new Image();
+            bottomImg.onload = () => {
+                this.logos.bottom = bottomImg;
+                // Redraw canvas if there's a photo loaded
+                if (this.photoboothImage) {
+                    const canvas = document.getElementById('photobooth-canvas');
+                    const ctx = canvas.getContext('2d');
+                    this.drawImage(ctx, canvas, this.photoboothImage);
+                }
+            };
+            bottomImg.src = bottomLogoSrc;
+        }
     }
 
     loadImage(file, ctx, canvas) {
@@ -480,45 +733,77 @@ class SwipableUI {
         // First draw the template background
         this.loadTemplate(ctx, canvas);
 
+        // If we have photo frame coordinates, use them
+        if (!this.photoFrameCoords) {
+            this.photoFrameCoords = {
+                x: canvas.width * 0.05,
+                y: canvas.height * 0.45,
+                width: canvas.width * 0.35,
+                height: canvas.height * 0.35
+            };
+        }
+
         // Save context state
         ctx.save();
 
-        // Define photo area (where user's photo goes)
-        const photoX = 50;
-        const photoY = 120;
-        const photoWidth = canvas.width - 100;
-        const photoHeight = canvas.height - 240;
-
-        // Create clipping region for photo area
+        // Create clipping region for photo frame area
         ctx.beginPath();
-        ctx.rect(photoX, photoY, photoWidth, photoHeight);
+        ctx.rect(
+            this.photoFrameCoords.x,
+            this.photoFrameCoords.y,
+            this.photoFrameCoords.width,
+            this.photoFrameCoords.height
+        );
         ctx.clip();
 
-        // Apply transformations within the photo area
-        ctx.translate(photoX + photoWidth / 2, photoY + photoHeight / 2);
+        // Apply transformations within the photo frame
+        const centerX = this.photoFrameCoords.x + this.photoFrameCoords.width / 2;
+        const centerY = this.photoFrameCoords.y + this.photoFrameCoords.height / 2;
+        
+        ctx.translate(centerX, centerY);
         ctx.rotate(this.imageRotation * Math.PI / 180);
         if (this.imageFlipped) {
             ctx.scale(-1, 1);
         }
 
-        // Calculate image dimensions to fit photo area
+        // Calculate image dimensions to fit photo frame
         const imgRatio = img.width / img.height;
-        const photoRatio = photoWidth / photoHeight;
+        const frameRatio = this.photoFrameCoords.width / this.photoFrameCoords.height;
         let drawWidth, drawHeight;
 
-        if (imgRatio > photoRatio) {
-            drawWidth = photoWidth;
-            drawHeight = photoWidth / imgRatio;
+        // Cover the frame (crop to fill)
+        if (imgRatio > frameRatio) {
+            drawHeight = this.photoFrameCoords.height;
+            drawWidth = drawHeight * imgRatio;
         } else {
-            drawHeight = photoHeight;
-            drawWidth = photoHeight * imgRatio;
+            drawWidth = this.photoFrameCoords.width;
+            drawHeight = drawWidth / imgRatio;
         }
 
-        // Draw image centered in photo area
+        // Draw image centered in photo frame
         ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
 
         // Restore context state
         ctx.restore();
+
+        // Redraw frame border on top of photo
+        ctx.strokeStyle = '#FFB6C1';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(
+            this.photoFrameCoords.x,
+            this.photoFrameCoords.y,
+            this.photoFrameCoords.width,
+            this.photoFrameCoords.height
+        );
+
+        // Redraw decorative heart
+        ctx.fillStyle = '#FF1493';
+        ctx.font = '24px Arial';
+        ctx.textAlign = 'left';
+        ctx.fillText('💗', 
+            this.photoFrameCoords.x + this.photoFrameCoords.width - 20, 
+            this.photoFrameCoords.y + this.photoFrameCoords.height + 20
+        );
     }
 
     rotateImage(ctx, canvas) {
