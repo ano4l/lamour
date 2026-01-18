@@ -99,20 +99,9 @@ class SwipableUI {
         // Update current section
         this.currentSection = sectionIndex;
         
-        // Update wrapper transform with natural easing
+        // Update wrapper transform - move vertically
         const wrapper = document.querySelector('.swipable-wrapper');
         wrapper.style.transform = `translateY(-${sectionIndex * 100}vh)`;
-        
-        // Update section states with staggered timing
-        document.querySelectorAll('.section').forEach((section, index) => {
-            if (index === sectionIndex) {
-                section.classList.add('active');
-                // Stagger animation for elements within the active section
-                this.animateSectionElements(section);
-            } else {
-                section.classList.remove('active');
-            }
-        });
         
         // Update navigation dots
         this.updateNavigationDots();
@@ -121,31 +110,6 @@ class SwipableUI {
         setTimeout(() => {
             this.isTransitioning = false;
         }, 600);
-    }
-
-    animateSectionElements(section) {
-        // Animate section header first
-        const header = section.querySelector('.section-header');
-        if (header) {
-            header.style.animation = 'none';
-            setTimeout(() => {
-                header.style.animation = 'fadeInUpNatural 0.6s ease-out';
-            }, 50);
-        }
-
-        // Stagger animate other elements
-        const elements = section.querySelectorAll('.poll-card, .prompt-container, .redflags-container, .music-container, .photobooth-container');
-        elements.forEach((el, index) => {
-            el.style.animation = 'none';
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                el.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-            }, 100 + (index * 100));
-        });
     }
 
     updateNavigationDots() {
@@ -507,11 +471,15 @@ class SwipableUI {
             
             this.cameraStream = stream;
             video.srcObject = stream;
-            video.style.display = 'block';
-            cameraOverlay.style.display = 'flex';
-            this.isCameraActive = true;
             
-            this.showNotification('Camera started! Position yourself and tap CAPTURE', 'info');
+            // Wait for video to be ready
+            video.onloadedmetadata = () => {
+                video.play();
+                video.style.display = 'block';
+                cameraOverlay.style.display = 'flex';
+                this.isCameraActive = true;
+                this.showNotification('Camera ready! Position yourself and tap CAPTURE', 'info');
+            };
         } catch (error) {
             console.error('Camera access error:', error);
             this.showNotification('Camera access denied or not available', 'error');
