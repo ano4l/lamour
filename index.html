@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>L'amour - Valentine's Event</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Navigation Dots -->
+        <div class="nav-dots">
+            <div class="dot active" data-section="0"></div>
+            <div class="dot" data-section="1"></div>
+            <div class="dot" data-section="2"></div>
+            <div class="dot" data-section="3"></div>
+            <div class="dot" data-section="4"></div>
+            <div class="dot" data-section="5"></div>
+        </div>
+
+        <!-- Swipable Sections -->
+        <div class="swipable-wrapper">
+            <!-- Section 1: Event Details (Landing) -->
+            <section class="section event-section active" data-section="0">
+                <div class="section-content">
+                    <div class="event-header">
+                        <div class="glowing-badge">LIMITED TICKETS</div>
+                        <h1 class="event-title">L'AMOUR</h1>
+                        <div class="event-question">DO YOU HAVE A VALENTINE?</div>
+                    </div>
+                    
+                    <div class="event-details-card">
+                        <div class="detail-item">
+                            <div class="detail-icon">◷</div>
+                            <div class="detail-text">
+                                <div class="detail-label">DATE</div>
+                                <div class="detail-value">02.14.26</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-icon">⌚</div>
+                            <div class="detail-text">
+                                <div class="detail-label">TIME</div>
+                                <div class="detail-value">15:00 SATURDAY TILL LATE</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-icon">◉</div>
+                            <div class="detail-text">
+                                <div class="detail-label">LOCATION</div>
+                                <div class="detail-value">99 JUTA ST, BRAAM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-icon">◆</div>
+                            <div class="detail-text">
+                                <div class="detail-label">PRESENTED BY</div>
+                                <div class="detail-value">SORAH X L&T EVENTS</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-icon">@</div>
+                            <div class="detail-text">
+                                <div class="detail-label">INSTAGRAM</div>
+                                <div class="detail-value"><a href="https://www.instagram.com/l.t.events?igsh=MXY1eW01ZW13bDNtbg%3D%3D&utm_source=qr" target="_blank" style="color: inherit; text-decoration: none;">@l.t.events</a> • <a href="https://instagram.com/sorahevents" target="_blank" style="color: inherit; text-decoration: none;">@sorahevents</a></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="https://www.howler.co.za/events/l-amour-1299?_gl=1%2At30g7q%2A_up%2AMQ..%2A_ga%2AOTAyMzg2MTQwLjE3Njg3Njg3ODA.%2A_ga_0X69KFQ5F8%2AczE3Njg3Njg3NzckbzEkZzAkdDE3Njg3Njg3NzckajYwJGwwJGgw%2A_ga_PP82175C1J%2AczE3Njg3Njg3NzkkbzEkZzAkdDE3Njg3Njg3NzkkajYwJGwwJGgw&utm_campaign=Instant+Search&utm_medium=Web&utm_source=Howler+Search" target="_blank" class="glowing-btn primary">GET TICKETS</a>
+                        <button class="glowing-btn secondary">SHARE EVENT</button>
+                    </div>
+                </div>
+                
+                <div class="swipe-indicator">
+                    <div class="swipe-text">Swipe up for polls</div>
+                    <div class="swipe-arrow">↑</div>
+                </div>
+            </section>
+
+            <!-- Section 2: Polls -->
+            <section class="section polls-section" data-section="1">
+                <div class="section-content">
+                    <div class="section-header">
+                        <h2 class="section-title">LOVE & RELATIONSHIPS</h2>
+                        <div class="section-subtitle">Vote in our anonymous polls</div>
+                    </div>
+                    
+                    <div class="polls-container">
+                        <div class="poll-card" data-poll-id="1">
+                            <div class="poll-question">Do you have a Valentine?</div>
+                            <div class="poll-options">
+                                <button class="poll-option" data-option="a">Yes, happily taken</button>
+                                <button class="poll-option" data-option="b">Single and ready to mingle</button>
+                                <button class="poll-option" data-option="c">It's complicated</button>
+                                <button class="poll-option" data-option="d">Single by choice</button>
+                            </div>
+                            <div class="poll-results">
+                                <div class="result-bar" data-option="a" style="width: 0%">Yes, happily taken: 0%</div>
+                                <div class="result-bar" data-option="b" style="width: 0%">Single and ready to mingle: 0%</div>
+                                <div class="result-bar" data-option="c" style="width: 0%">It's complicated: 0%</div>
+                                <div class="result-bar" data-option="d" style="width: 0%">Single by choice: 0%</div>
+                            </div>
+                        </div>
+
+                        <div class="poll-card" data-poll-id="2">
+                            <div class="poll-question">What's your relationship status?</div>
+                            <div class="poll-options">
+                                <button class="poll-option" data-option="a">Dating someone special</button>
+                                <button class="poll-option" data-option="b">Single and loving it</button>
+                                <button class="poll-option" data-option="c">In a situationship</button>
+                                <button class="poll-option" data-option="d">Recently single</button>
+                            </div>
+                            <div class="poll-results">
+                                <div class="result-bar" data-option="a" style="width: 0%">Dating someone special: 0%</div>
+                                <div class="result-bar" data-option="b" style="width: 0%">Single and loving it: 0%</div>
+                                <div class="result-bar" data-option="c" style="width: 0%">In a situationship: 0%</div>
+                                <div class="result-bar" data-option="d" style="width: 0%">Recently single: 0%</div>
+                            </div>
+                        </div>
+
+                        <div class="poll-card" data-poll-id="3">
+                            <div class="poll-question">How are you spending Valentine's Day?</div>
+                            <div class="poll-options">
+                                <button class="poll-option" data-option="a">With my partner</button>
+                                <button class="poll-option" data-option="b">Galentine's with friends</button>
+                                <button class="poll-option" data-option="c">Self-love day</button>
+                                <button class="poll-option" data-option="d">At L'amour event!</button>
+                            </div>
+                            <div class="poll-results">
+                                <div class="result-bar" data-option="a" style="width: 0%">With my partner: 0%</div>
+                                <div class="result-bar" data-option="b" style="width: 0%">Galentine's with friends: 0%</div>
+                                <div class="result-bar" data-option="c" style="width: 0%">Self-love day: 0%</div>
+                                <div class="result-bar" data-option="d" style="width: 0%">At L'amour event!: 0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="swipe-indicator">
+                    <div class="swipe-text">Swipe up for red flags</div>
+                    <div class="swipe-arrow">↑</div>
+                </div>
+            </section>
+
+            <!-- Section 3: Prompt -->
+            <section class="section prompt-section" data-section="2">
+                <div class="section-content">
+                    <div class="section-header">
+                        <h2 class="section-title">BIGGEST RED FLAGS</h2>
+                        <div class="section-subtitle">What are your relationship red flags?</div>
+                    </div>
+                    
+                    <div class="prompt-container">
+                        <div class="prompt-input-wrapper">
+                            <textarea 
+                                class="prompt-input" 
+                                placeholder="Share your biggest red flag in relationships... bad communication, still friends with ex, no ambition, terrible taste in music..."
+                                rows="4"
+                            ></textarea>
+                            <div class="prompt-actions">
+                                <button class="prompt-btn clear">Clear</button>
+                                <button class="prompt-btn generate">Submit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="prompt-result">
+                            <div class="result-text">
+                                Your red flag will appear here for others to see...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prompt-examples">
+                        <div class="example-title">Common red flags:</div>
+                        <div class="example-chips">
+                            <button class="example-chip">Bad communication</button>
+                            <button class="example-chip">Still friends with ex</button>
+                            <button class="example-chip">No ambition</button>
+                            <button class="example-chip">Terrible music taste</button>
+                            <button class="example-chip">Love bombing</button>
+                            <button class="example-chip">Ghosting</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="swipe-indicator">
+                    <div class="swipe-text">Swipe up to see red flags</div>
+                    <div class="swipe-arrow">↑</div>
+                </div>
+            </section>
+
+            <!-- Section 4: Red Flags Display -->
+            <section class="section redflags-section" data-section="3">
+                <div class="section-content">
+                    <div class="section-header">
+                        <h2 class="section-title">RED FLAGS</h2>
+                        <div class="section-subtitle">What people are saying</div>
+                    </div>
+                    
+                    <div class="redflags-container">
+                        <div class="redflags-list">
+                            <!-- Red flags will appear here as users submit them -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="swipe-indicator">
+                    <div class="swipe-text">Swipe up for music</div>
+                    <div class="swipe-arrow">↑</div>
+                </div>
+            </section>
+
+            <!-- Section 5: Music Requests -->
+            <section class="section music-section" data-section="4">
+                <div class="section-content">
+                    <div class="section-header">
+                        <h2 class="section-title">R&B VIBES</h2>
+                        <div class="section-subtitle">Request your perfect soundtrack</div>
+                    </div>
+                    
+                    <div class="music-container">
+                        <div class="music-tabs">
+                            <button class="tab-btn active" data-tab="request">REQUEST</button>
+                            <button class="tab-btn" data-tab="suggestions">ALL SUGGESTIONS</button>
+                        </div>
+                        
+                        <div class="tab-content">
+                            <!-- Request Tab -->
+                            <div class="tab-pane active" id="request-tab">
+                                <div class="music-form">
+                                    <div class="input-group">
+                                        <input type="text" class="music-input" placeholder="Song title" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="text" class="music-input" placeholder="Artist" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <textarea class="music-input music-textarea" placeholder="Special dedication (optional)" rows="3"></textarea>
+                                    </div>
+                                    <button class="submit-btn">SUBMIT REQUEST</button>
+                                </div>
+                                
+                                <div class="recent-suggestions">
+                                    <h3>Recent Song Suggestions</h3>
+                                    <div class="suggestions-list">
+                                        <!-- Song suggestions will appear here as users submit them -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- All Suggestions Tab -->
+                            <div class="tab-pane" id="suggestions-tab">
+                                <div class="suggestions-list">
+                                    <!-- All song suggestions will appear here as users submit them -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 6: Photobooth -->
+            <section class="section photobooth-section" data-section="5">
+                <div class="section-content">
+                    <div class="section-header">
+                        <h2 class="section-title">PHOTOBOOTH</h2>
+                        <div class="section-subtitle">Capture your L'amour moment</div>
+                    </div>
+                    
+                    <div class="photobooth-container">
+                        <div class="photobooth-canvas-wrapper">
+                            <canvas id="photobooth-canvas" width="400" height="600"></canvas>
+                            <div class="template-overlay">
+                                <div class="template-text">L'AMOUR</div>
+                                <div class="template-date">02.14.26</div>
+                            </div>
+                        </div>
+                        
+                        <div class="photobooth-controls">
+                            <div class="camera-controls">
+                                <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                                <button class="photobooth-btn primary" id="upload-btn">
+                                    <span class="btn-icon">📷</span>
+                                    UPLOAD PHOTO
+                                </button>
+                                <button class="photobooth-btn secondary" id="camera-btn">
+                                    <span class="btn-icon">📸</span>
+                                    TAKE PHOTO
+                                </button>
+                            </div>
+                            
+                            <div class="edit-controls">
+                                <button class="edit-btn" id="rotate-btn">
+                                    <span class="btn-icon">↻</span>
+                                    ROTATE
+                                </button>
+                                <button class="edit-btn" id="flip-btn">
+                                    <span class="btn-icon">↔</span>
+                                    FLIP
+                                </button>
+                                <button class="edit-btn" id="reset-btn">
+                                    <span class="btn-icon">⟲</span>
+                                    RESET
+                                </button>
+                            </div>
+                            
+                            <div class="save-controls">
+                                <button class="save-btn" id="download-btn">
+                                    <span class="btn-icon">⬇</span>
+                                    DOWNLOAD
+                                </button>
+                                <button class="save-btn" id="share-btn">
+                                    <span class="btn-icon">⤴</span>
+                                    SHARE
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="photobooth-instructions">
+                            <h3>How to use:</h3>
+                            <ul>
+                                <li>Upload a photo or take one with your camera</li>
+                                <li>Adjust position with rotate/flip buttons</li>
+                                <li>Download your L'amour photobooth image</li>
+                                <li>Share with friends and tag @l.t.events!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Floating Action Button -->
+        <div class="floating-mic">
+            <div class="mic-icon">◉</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
