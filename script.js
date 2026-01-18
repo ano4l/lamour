@@ -3,9 +3,13 @@ class SwipableUI {
     constructor() {
         this.currentSection = 0;
         this.totalSections = 6;
-        this.isTransitioning = false;
-        this.touchStartY = 0;
-        this.touchEndY = 0;
+        this.isAnimating = false;
+        this.startY = 0;
+        this.currentY = 0;
+        this.isDragging = false;
+        this.wrapper = null;
+        this.threshold = 80; // Minimum swipe distance to trigger navigation
+        
         this.pollData = {
             1: { a: 0, b: 0, c: 0, d: 0 },
             2: { a: 0, b: 0, c: 0, d: 0 },
@@ -18,15 +22,13 @@ class SwipableUI {
         this.imageFlipped = false;
         this.cameraStream = null;
         this.isCameraActive = false;
-        this.logos = {
-            top: null,
-            bottom: null
-        };
+        this.logos = { top: null, bottom: null };
         
         this.init();
     }
 
     init() {
+        this.wrapper = document.querySelector('.swipable-wrapper');
         this.setupTouchEvents();
         this.setupNavigation();
         this.setupPolls();
@@ -35,106 +37,159 @@ class SwipableUI {
         this.setupPhotobooth();
         this.setupFloatingMic();
         this.initializePollResults();
+        this.goToSection(0);
     }
 
     setupTouchEvents() {
-        const wrapper = document.querySelector('.swipable-wrapper');
+        const container = document.querySelector('.mobile-container');
         
-        // Touch events
-        wrapper.addEventListener('touchstart', (e) => {
-            this.touchStartY = e.touches[0].clientY;
+        // Touch Start
+        container.addEventListener('touchstart', (e) => {
+            if (this.isAnimating) return;
+            this.startY = e.touches[0].clientY;
+            this.currentY = this.startY;
+            this.isDragging = true;
+            this.wrapper.style.transition = 'none';
         }, { passive: true });
 
-        wrapper.addEventListener('touchend', (e) => {
-            this.touchEndY = e.changedTouches[0].clientY;
-            this.handleSwipe();
+        // Touch Move - Real-time drag feedback
+        container.addEventListener('touchmove', (e) => {
+            if (!this.isDragging || this.isAnimating) return;
+            
+            this.currentY = e.touches[0].clientY;
+            const diff = this.currentY - this.startY;
+            const baseOffset = -this.currentSection * window.innerHeight;
+            
+            // Add resistance at boundaries
+            let resistance = 1;
+            if ((this.currentSection === 0 && diff > 0) || 
+                (this.currentSection === this.totalSections - 1 && diff < 0)) {
+                resistance = 0.3;
+            }
+            
+            const newOffset = baseOffset + (diff * resistance);
+            this.wrapper.style.transform = `translateY(${newOffset}px)`;
+        }, { passive: true });
+
+        // Touch End - Determine if swipe was successful
+        container.addEventListener('touchend', (e) => {
+            if (!this.isDragging) return;
+            this.isDragging = false;
+            
+            const diff = this.currentY - this.startY;
+            this.wrapper.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            
+            if (Math.abs(diff) > this.threshold) {
+                if (diff < 0 && this.currentSection < this.totalSections - 1) {
+                    // Swipe up - go to next section
+                    this.goToSection(this.currentSection + 1);
+                } else if (diff > 0 && this.currentSection > 0) {
+                    // Swipe down - go to previous section
+                    this.goToSection(this.currentSection - 1);
+                } else {
+                    // Bounce back
+                    this.goToSection(this.currentSection);
+                }
+            } else {
+                // Didn't swipe far enough, bounce back
+                this.goToSection(this.currentSection);
+            }
         }, { passive: true });
 
         // Mouse events for desktop testing
-        let mouseDown = false;
-        wrapper.addEventListener('mousedown', (e) => {
-            mouseDown = true;
-            this.touchStartY = e.clientY;
+        container.addEventListener('mousedown', (e) => {
+            if (this.isAnimating) return;
+            this.startY = e.clientY;
+            this.currentY = this.startY;
+            this.isDragging = true;
+            this.wrapper.style.transition = 'none';
         });
 
-        wrapper.addEventListener('mouseup', (e) => {
-            if (mouseDown) {
-                this.touchEndY = e.clientY;
-                this.handleSwipe();
-                mouseDown = false;
+        container.addEventListener('mousemove', (e) => {
+            if (!this.isDragging || this.isAnimating) return;
+            
+            this.currentY = e.clientY;
+            const diff = this.currentY - this.startY;
+            const baseOffset = -this.currentSection * window.innerHeight;
+            
+            let resistance = 1;
+            if ((this.currentSection === 0 && diff > 0) || 
+                (this.currentSection === this.totalSections - 1 && diff < 0)) {
+                resistance = 0.3;
+            }
+            
+            const newOffset = baseOffset + (diff * resistance);
+            this.wrapper.style.transform = `translateY(${newOffset}px)`;
+        });
+
+        container.addEventListener('mouseup', (e) => {
+            if (!this.isDragging) return;
+            this.isDragging = false;
+            
+            const diff = this.currentY - this.startY;
+            this.wrapper.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            
+            if (Math.abs(diff) > this.threshold) {
+                if (diff < 0 && this.currentSection < this.totalSections - 1) {
+                    this.goToSection(this.currentSection + 1);
+                } else if (diff > 0 && this.currentSection > 0) {
+                    this.goToSection(this.currentSection - 1);
+                } else {
+                    this.goToSection(this.currentSection);
+                }
+            } else {
+                this.goToSection(this.currentSection);
+            }
+        });
+
+        container.addEventListener('mouseleave', () => {
+            if (this.isDragging) {
+                this.isDragging = false;
+                this.wrapper.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                this.goToSection(this.currentSection);
             }
         });
 
         // Wheel events for desktop
-        wrapper.addEventListener('wheel', (e) => {
+        container.addEventListener('wheel', (e) => {
             e.preventDefault();
-            if (e.deltaY > 0 && this.currentSection < this.totalSections - 1) {
-                this.navigateToSection(this.currentSection + 1);
-            } else if (e.deltaY < 0 && this.currentSection > 0) {
-                this.navigateToSection(this.currentSection - 1);
+            if (this.isAnimating) return;
+            
+            if (e.deltaY > 30 && this.currentSection < this.totalSections - 1) {
+                this.goToSection(this.currentSection + 1);
+            } else if (e.deltaY < -30 && this.currentSection > 0) {
+                this.goToSection(this.currentSection - 1);
             }
         }, { passive: false });
     }
 
-    handleSwipe() {
-        const swipeDistance = this.touchStartY - this.touchEndY;
-        const minSwipeDistance = 30;
-
-        if (Math.abs(swipeDistance) < minSwipeDistance) return;
-
-        if (swipeDistance > 0 && this.currentSection < this.totalSections - 1) {
-            // Swipe up - next section
-            this.navigateToSection(this.currentSection + 1);
-        } else if (swipeDistance < 0 && this.currentSection > 0) {
-            // Swipe down - previous section
-            this.navigateToSection(this.currentSection - 1);
-        }
-    }
-
-    navigateToSection(sectionIndex) {
-        if (this.isTransitioning || sectionIndex === this.currentSection) return;
+    goToSection(index) {
+        if (index < 0 || index >= this.totalSections) return;
         
-        this.isTransitioning = true;
+        this.isAnimating = true;
+        this.currentSection = index;
         
-        // Update current section
-        this.currentSection = sectionIndex;
-        
-        // Update wrapper transform - move vertically
-        const wrapper = document.querySelector('.swipable-wrapper');
-        wrapper.style.transform = `translateY(-${sectionIndex * 100}vh)`;
+        const offset = -index * window.innerHeight;
+        this.wrapper.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        this.wrapper.style.transform = `translateY(${offset}px)`;
         
         // Update navigation dots
-        this.updateNavigationDots();
-        
-        // Reset transition flag after animation completes
-        setTimeout(() => {
-            this.isTransitioning = false;
-        }, 600);
-    }
-
-    updateNavigationDots() {
-        document.querySelectorAll('.dot').forEach((dot, index) => {
-            if (index === this.currentSection) {
-                dot.classList.add('active');
-            } else {
-                dot.classList.remove('active');
-            }
+        document.querySelectorAll('.dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
         });
+        
+        setTimeout(() => {
+            this.isAnimating = false;
+        }, 400);
     }
 
     setupNavigation() {
-        // Navigation dots
+        // Navigation dots click
         document.querySelectorAll('.dot').forEach((dot, index) => {
             dot.addEventListener('click', () => {
-                this.navigateToSection(index);
-            });
-        });
-
-        // Action buttons
-        document.querySelectorAll('.glowing-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const text = e.target.textContent;
-                this.showNotification(`${text} feature coming soon!`, 'info');
+                if (!this.isAnimating) {
+                    this.goToSection(index);
+                }
             });
         });
     }
