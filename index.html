@@ -112,35 +112,30 @@
 
     </div>
 
-    <!-- Red Flags Modal -->
-    <div id="redFlagsModal" class="modal hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>🚩 Biggest Red Flags</h2>
-                <button class="modal-close" id="closeModal">&times;</button>
-            </div>
-            <p class="modal-subtitle">Share your relationship red flags anonymously</p>
-            <form id="redFlagForm" class="modal-form">
+    <!-- Red Flags Section -->
+    <section class="redflags-page-section">
+        <div class="redflags-page-container">
+            <h2 class="redflags-page-title">🚩 Biggest Red Flags</h2>
+            <p class="redflags-page-subtitle">Share your relationship red flags anonymously</p>
+            
+            <form id="redFlagForm" class="redflags-page-form">
                 <textarea 
                     id="redFlagInput"
-                    class="modal-textarea"
+                    class="redflags-page-textarea"
                     placeholder="What's your biggest relationship red flag?"
                     maxlength="150"
                     required
                 ></textarea>
-                <div class="modal-footer">
+                <div class="redflags-page-footer">
                     <span class="char-count" id="charCount">0/150</span>
-                    <button type="submit" class="btn-submit-modal">Submit</button>
+                    <button type="submit" class="btn-submit-page">Submit Red Flag</button>
                 </div>
             </form>
             <div id="successMessage" class="success-message hidden">
                 ✅ Your red flag has been submitted!
             </div>
         </div>
-    </div>
-
-    <!-- Floating Red Flags Button -->
-    <button id="redFlagsBtn" class="floating-btn">🚩 Red Flags</button>
+    </section>
 
     <script>
         // Inline countdown timer to ensure it works
@@ -172,34 +167,12 @@
             startCountdown();
         }
         
-        // Red Flags Modal Handler
-        function setupRedFlagsModal() {
-            const modal = document.getElementById('redFlagsModal');
-            const btn = document.getElementById('redFlagsBtn');
-            const closeBtn = document.getElementById('closeModal');
+        // Red Flags Page Handler
+        function setupRedFlagsPage() {
             const form = document.getElementById('redFlagForm');
             const input = document.getElementById('redFlagInput');
             const charCount = document.getElementById('charCount');
             const successMsg = document.getElementById('successMessage');
-            
-            // Open modal
-            btn.addEventListener('click', () => {
-                modal.classList.remove('hidden');
-            });
-            
-            // Close modal
-            closeBtn.addEventListener('click', () => {
-                modal.classList.add('hidden');
-                resetForm();
-            });
-            
-            // Close on outside click
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
-                    resetForm();
-                }
-            });
             
             // Character counter
             input.addEventListener('input', (e) => {
@@ -219,9 +192,8 @@
                     // Submit to Supabase (admin-only view)
                     await submitRedFlagToSupabase(text);
                     
-                    // Close modal after 2 seconds
+                    // Reset form after 2 seconds
                     setTimeout(() => {
-                        modal.classList.add('hidden');
                         resetForm();
                     }, 2000);
                 }
@@ -260,11 +232,11 @@
             }
         }
         
-        // Initialize red flags modal when DOM is ready
+        // Initialize red flags page when DOM is ready
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', setupRedFlagsModal);
+            document.addEventListener('DOMContentLoaded', setupRedFlagsPage);
         } else {
-            setupRedFlagsModal();
+            setupRedFlagsPage();
         }
     </script>
     <script src="app-supabase.js"></script>
