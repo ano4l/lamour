@@ -72,18 +72,93 @@ class CardCreator {
         this.userImage = null;
         this.customText = '';
         
-        // Template coordinates
-        this.textPosition = { x: 550, y: 280 };
-        this.imagePosition = { x: 20, y: 470, width: 360, height: 270 };
+        // Template coordinates (adjusted for actual template)
+        // Text appears above "Do you have a valentine?" on right side
+        this.textPosition = { x: 550, y: 250 };
+        // Photo box in bottom left corner
+        this.imagePosition = { x: 15, y: 365, width: 350, height: 260 };
         
         this.init();
     }
 
     init() {
-        this.templateImage.crossOrigin = 'anonymous';
-        this.templateImage.onload = () => this.renderCard();
-        this.templateImage.src = 'data:image/svg+xml;base64,' + btoa(this.createTemplateSVG());
+        // Render initial placeholder
+        this.renderInitialTemplate();
+        
+        // Load actual template image from directory
+        this.templateImage.onload = () => {
+            console.log('Template image loaded successfully');
+            this.renderCard();
+        };
+        this.templateImage.onerror = () => {
+            console.error('Template image failed to load, using fallback');
+            this.renderInitialTemplate();
+        };
+        
+        // Load the template image from directory
+        this.templateImage.src = 'Image.jpg';
         this.setupEventListeners();
+    }
+
+    renderInitialTemplate() {
+        // Draw a basic template immediately so canvas isn't blank
+        const ctx = this.ctx;
+        
+        // Background gradient
+        const gradient = ctx.createLinearGradient(0, 0, 800, 800);
+        gradient.addColorStop(0, '#FFE4E6');
+        gradient.addColorStop(1, '#FFC0CB');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 800, 800);
+        
+        // Center divider line
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(400, 0);
+        ctx.lineTo(400, 800);
+        ctx.stroke();
+        
+        // Left side text
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 48px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText("L'AMOUR", 200, 60);
+        ctx.font = '16px Arial';
+        ctx.fillText('VALENTINES EVENT', 200, 100);
+        
+        // Right side text
+        ctx.font = 'bold 48px Arial';
+        ctx.fillText('02.14.26', 600, 60);
+        ctx.font = '16px Arial';
+        ctx.fillText('SATURDAY', 600, 90);
+        ctx.fillText('15:00 TILL LATE', 600, 110);
+        
+        // "Do you have a valentine?" text
+        ctx.font = 'italic 32px Georgia';
+        ctx.fillText('Do you HAVE', 600, 340);
+        ctx.fillText('A VALENTINE?', 600, 380);
+        
+        // Bottom right info
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText('LIMITED TICKETS', 600, 480);
+        ctx.font = '16px Arial';
+        ctx.fillText('99 JUTA ST, BRAAM', 600, 510);
+        ctx.font = 'bold 18px Arial';
+        ctx.fillText('SORAH X', 600, 560);
+        ctx.fillText('L&T EVENTS', 600, 590);
+        
+        // Photo placeholder box
+        ctx.fillStyle = '#E8D5E0';
+        ctx.fillRect(20, 470, 360, 270);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(20, 470, 360, 270);
+        
+        // Placeholder text
+        ctx.fillStyle = '#666';
+        ctx.font = '14px Arial';
+        ctx.fillText('Your Photo Here', 200, 605);
     }
 
     createTemplateSVG() {
@@ -139,10 +214,19 @@ class CardCreator {
         reader.onload = (e) => {
             const img = new Image();
             img.onload = () => {
+                console.log('User image loaded:', img.width, 'x', img.height);
                 this.userImage = img;
                 this.renderCard();
             };
+            img.onerror = () => {
+                console.error('Failed to load user image');
+                alert('Failed to load image. Please try a different file.');
+            };
             img.src = e.target.result;
+        };
+        reader.onerror = () => {
+            console.error('Failed to read file');
+            alert('Failed to read file. Please try again.');
         };
         reader.readAsDataURL(file);
     }
@@ -150,8 +234,12 @@ class CardCreator {
     renderCard() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        if (this.templateImage.complete) {
+        // Always draw template (either SVG or fallback)
+        if (this.templateImage.complete && this.templateImage.width > 0) {
             this.ctx.drawImage(this.templateImage, 0, 0, this.canvas.width, this.canvas.height);
+        } else {
+            // Use fallback rendering if SVG not loaded
+            this.renderInitialTemplate();
         }
 
         if (this.userImage) {
