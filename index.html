@@ -112,53 +112,6 @@
 
     </div>
 
-    <!-- Red Flags Section -->
-    <section class="redflags-section" id="redflags">
-        <div class="redflags-container">
-            <h2 class="redflags-title">Biggest Red Flags</h2>
-            <p class="redflags-subtitle">Share your relationship red flags anonymously</p>
-            
-            <div class="redflags-content">
-                <!-- Submission Form -->
-                <div class="redflags-form-wrapper">
-                    <form class="redflags-form" id="redflagForm">
-                        <textarea 
-                            id="redflagInput"
-                            class="redflags-textarea"
-                            placeholder="What's your biggest relationship red flag?"
-                            maxlength="150"
-                            required
-                        ></textarea>
-                        <div class="redflags-form-footer">
-                            <span class="char-count" id="charCount">0/150</span>
-                            <button type="submit" class="btn-submit">Submit Red Flag</button>
-                        </div>
-                    </form>
-                    
-                    <div class="quick-picks">
-                        <h3 class="quick-picks-title">Quick picks:</h3>
-                        <div class="quick-picks-grid">
-                            <button class="quick-pick-btn" data-text="Bad communication">💔 Bad communication</button>
-                            <button class="quick-pick-btn" data-text="Ghosting">👻 Ghosting</button>
-                            <button class="quick-pick-btn" data-text="Love bombing">💣 Love bombing</button>
-                            <button class="quick-pick-btn" data-text="Still friends with ex">📱 Still friends with ex</button>
-                            <button class="quick-pick-btn" data-text="No ambition">🎯 No ambition</button>
-                            <button class="quick-pick-btn" data-text="Terrible music taste">🎵 Terrible music taste</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Red Flags Display -->
-                <div class="redflags-display">
-                    <h3 class="redflags-display-title">Recent Red Flags</h3>
-                    <div class="redflags-list" id="redflagsList">
-                        <!-- Red flags will be added here dynamically -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <script>
         // Inline countdown timer to ensure it works
         function startCountdown() {
