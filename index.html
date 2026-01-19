@@ -5,336 +5,272 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>L'amour - Valentine's Event</title>
+    <meta name="theme-color" content="#FF1493">
+    <meta name="description" content="L'amour Valentine's Event 2026 - Join us for an unforgettable night of love, music, and memories">
+    <title>L'amour - Valentine's Event 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="mobile-container" role="main">
-        <!-- Navigation Dots -->
-        <div class="nav-dots">
-            <div class="dot active" data-section="0"></div>
-            <div class="dot" data-section="1"></div>
-            <div class="dot" data-section="2"></div>
-            <div class="dot" data-section="3"></div>
-            <div class="dot" data-section="4"></div>
-            <div class="dot" data-section="5"></div>
-        </div>
+    <div id="app" class="app-container">
+        <nav class="nav-dots" aria-label="Page navigation">
+            <button class="nav-dot active" data-section="0" aria-label="Go to event details"></button>
+            <button class="nav-dot" data-section="1" aria-label="Go to polls"></button>
+            <button class="nav-dot" data-section="2" aria-label="Go to red flags submission"></button>
+            <button class="nav-dot" data-section="3" aria-label="Go to red flags list"></button>
+            <button class="nav-dot" data-section="4" aria-label="Go to music requests"></button>
+            <button class="nav-dot" data-section="5" aria-label="Go to photobooth"></button>
+        </nav>
 
-        <!-- Swipable Sections -->
-        <div class="swipable-wrapper">
-            <!-- Section 1: Event Details (Landing) -->
-            <section class="section event-section active" data-section="0">
-                <div class="section-content">
-                    <div class="event-header">
-                        <div class="glowing-badge">LIMITED TICKETS</div>
-                        <h1 class="event-title">L'AMOUR</h1>
-                        <div class="event-question">DO YOU HAVE A VALENTINE?</div>
-                    </div>
+        <main class="sections-wrapper">
+            <section class="section section--hero" data-section="0">
+                <div class="section__content">
+                    <header class="hero">
+                        <span class="badge badge--pulse">LIMITED TICKETS</span>
+                        <h1 class="hero__title">L'AMOUR</h1>
+                        <p class="hero__subtitle">DO YOU HAVE A VALENTINE?</p>
+                    </header>
                     
-                    <div class="event-details-card">
-                        <div class="detail-item">
-                            <div class="detail-icon">◷</div>
-                            <div class="detail-text">
-                                <div class="detail-label">DATE</div>
-                                <div class="detail-value">02.14.26</div>
+                    <article class="event-card">
+                        <div class="event-card__item">
+                            <span class="event-card__icon" aria-hidden="true">📅</span>
+                            <div class="event-card__details">
+                                <span class="event-card__label">DATE</span>
+                                <span class="event-card__value">February 14, 2026</span>
                             </div>
                         </div>
                         
-                        <div class="detail-item">
-                            <div class="detail-icon">⌚</div>
-                            <div class="detail-text">
-                                <div class="detail-label">TIME</div>
-                                <div class="detail-value">15:00 SATURDAY TILL LATE</div>
+                        <div class="event-card__item">
+                            <span class="event-card__icon" aria-hidden="true">⏰</span>
+                            <div class="event-card__details">
+                                <span class="event-card__label">TIME</span>
+                                <span class="event-card__value">3:00 PM - Late</span>
                             </div>
                         </div>
                         
-                        <div class="detail-item">
-                            <div class="detail-icon">◉</div>
-                            <div class="detail-text">
-                                <div class="detail-label">LOCATION</div>
-                                <div class="detail-value">99 JUTA ST, BRAAM</div>
+                        <div class="event-card__item">
+                            <span class="event-card__icon" aria-hidden="true">📍</span>
+                            <div class="event-card__details">
+                                <span class="event-card__label">LOCATION</span>
+                                <span class="event-card__value">99 Juta St, Braamfontein</span>
                             </div>
                         </div>
                         
-                        <div class="detail-item">
-                            <div class="detail-icon">◆</div>
-                            <div class="detail-text">
-                                <div class="detail-label">PRESENTED BY</div>
-                                <div class="detail-value">SORAH X L&T EVENTS</div>
+                        <div class="event-card__item">
+                            <span class="event-card__icon" aria-hidden="true">✨</span>
+                            <div class="event-card__details">
+                                <span class="event-card__label">PRESENTED BY</span>
+                                <span class="event-card__value">SORAH × L&T EVENTS</span>
                             </div>
                         </div>
                         
-                        <div class="detail-item">
-                            <div class="detail-icon">@</div>
-                            <div class="detail-text">
-                                <div class="detail-label">INSTAGRAM</div>
-                                <div class="detail-value"><a href="https://www.instagram.com/l.t.events?igsh=MXY1eW01ZW13bDNtbg%3D%3D&utm_source=qr" target="_blank" style="color: inherit; text-decoration: none;">@l.t.events</a> • <a href="https://instagram.com/sorahevents" target="_blank" style="color: inherit; text-decoration: none;">@sorahevents</a></div>
+                        <div class="event-card__item">
+                            <span class="event-card__icon" aria-hidden="true">📱</span>
+                            <div class="event-card__details">
+                                <span class="event-card__label">FOLLOW US</span>
+                                <span class="event-card__value">
+                                    <a href="https://www.instagram.com/l.t.events" target="_blank" rel="noopener" class="event-link">@l.t.events</a> • 
+                                    <a href="https://instagram.com/sorahevents" target="_blank" rel="noopener" class="event-link">@sorahevents</a>
+                                </span>
                             </div>
                         </div>
-                    </div>
+                    </article>
 
-                    <div class="action-buttons">
-                        <a href="https://www.howler.co.za/events/l-amour-1299?_gl=1%2At30g7q%2A_up%2AMQ..%2A_ga%2AOTAyMzg2MTQwLjE3Njg3Njg3ODA.%2A_ga_0X69KFQ5F8%2AczE3Njg3Njg3NzckbzEkZzAkdDE3Njg3Njg3NzckajYwJGwwJGgw%2A_ga_PP82175C1J%2AczE3Njg3Njg3NzkkbzEkZzAkdDE3Njg3Njg3NzkkajYwJGwwJGgw&utm_campaign=Instant+Search&utm_medium=Web&utm_source=Howler+Search" target="_blank" class="glowing-btn primary">GET TICKETS</a>
-                        <button class="glowing-btn secondary">SHARE EVENT</button>
+                    <div class="cta-group">
+                        <a href="https://www.howler.co.za/events/l-amour-1299" target="_blank" rel="noopener" class="btn btn--primary btn--glow">GET TICKETS</a>
+                        <button class="btn btn--secondary" id="share-event-btn">SHARE EVENT</button>
                     </div>
                 </div>
                 
-                <div class="swipe-indicator">
-                    <div class="swipe-text">Swipe up for polls</div>
-                    <div class="swipe-arrow">↑</div>
+                <div class="swipe-hint">
+                    <span class="swipe-hint__text">Swipe up for polls</span>
+                    <span class="swipe-hint__arrow" aria-hidden="true">↑</span>
                 </div>
             </section>
 
-            <!-- Section 2: Polls -->
-            <section class="section polls-section" data-section="1">
-                <div class="section-content">
-                    <div class="section-header">
-                        <h2 class="section-title">LOVE & RELATIONSHIPS</h2>
-                        <div class="section-subtitle">Vote in our anonymous polls</div>
-                    </div>
+            <section class="section section--polls" data-section="1">
+                <div class="section__content">
+                    <header class="section__header">
+                        <h2 class="section__title">LOVE & RELATIONSHIPS</h2>
+                        <p class="section__subtitle">Vote in our anonymous polls</p>
+                    </header>
                     
-                    <div class="polls-container">
-                        <div class="poll-card" data-poll-id="1">
-                            <div class="poll-question">Do you have a Valentine?</div>
-                            <div class="poll-options">
-                                <button class="poll-option" data-option="a">Yes, happily taken</button>
-                                <button class="poll-option" data-option="b">Single and ready to mingle</button>
-                                <button class="poll-option" data-option="c">It's complicated</button>
-                                <button class="poll-option" data-option="d">Single by choice</button>
-                            </div>
-                            <div class="poll-results">
-                                <div class="result-bar" data-option="a" style="width: 0%">Yes, happily taken: 0%</div>
-                                <div class="result-bar" data-option="b" style="width: 0%">Single and ready to mingle: 0%</div>
-                                <div class="result-bar" data-option="c" style="width: 0%">It's complicated: 0%</div>
-                                <div class="result-bar" data-option="d" style="width: 0%">Single by choice: 0%</div>
-                            </div>
-                        </div>
-
-                        <div class="poll-card" data-poll-id="2">
-                            <div class="poll-question">What's your relationship status?</div>
-                            <div class="poll-options">
-                                <button class="poll-option" data-option="a">Dating someone special</button>
-                                <button class="poll-option" data-option="b">Single and loving it</button>
-                                <button class="poll-option" data-option="c">In a situationship</button>
-                                <button class="poll-option" data-option="d">Recently single</button>
-                            </div>
-                            <div class="poll-results">
-                                <div class="result-bar" data-option="a" style="width: 0%">Dating someone special: 0%</div>
-                                <div class="result-bar" data-option="b" style="width: 0%">Single and loving it: 0%</div>
-                                <div class="result-bar" data-option="c" style="width: 0%">In a situationship: 0%</div>
-                                <div class="result-bar" data-option="d" style="width: 0%">Recently single: 0%</div>
-                            </div>
-                        </div>
-
-                        <div class="poll-card" data-poll-id="3">
-                            <div class="poll-question">How are you spending Valentine's Day?</div>
-                            <div class="poll-options">
-                                <button class="poll-option" data-option="a">At L'amour</button>
-                                <button class="poll-option" data-option="b">At L'amour</button>
-                                <button class="poll-option" data-option="c">At L'amour</button>
-                                <button class="poll-option" data-option="d">At L'amour</button>
-                            </div>
-                            <div class="poll-results">
-                                <div class="result-bar" data-option="a" style="width: 0%">At L'amour: 0%</div>
-                                <div class="result-bar" data-option="b" style="width: 0%">At L'amour: 0%</div>
-                                <div class="result-bar" data-option="c" style="width: 0%">At L'amour: 0%</div>
-                                <div class="result-bar" data-option="d" style="width: 0%">At L'amour: 0%</div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="polls" id="polls-container"></div>
                 </div>
                 
-                <div class="swipe-indicator">
-                    <div class="swipe-text">Swipe up for red flags</div>
-                    <div class="swipe-arrow">↑</div>
+                <div class="swipe-hint">
+                    <span class="swipe-hint__text">Swipe up for red flags</span>
+                    <span class="swipe-hint__arrow" aria-hidden="true">↑</span>
                 </div>
             </section>
 
-            <!-- Section 3: Prompt -->
-            <section class="section prompt-section" data-section="2">
-                <div class="section-content">
-                    <div class="section-header">
-                        <h2 class="section-title">BIGGEST RED FLAGS</h2>
-                        <div class="section-subtitle">What are your relationship red flags?</div>
-                    </div>
+            <section class="section section--submit" data-section="2">
+                <div class="section__content">
+                    <header class="section__header">
+                        <h2 class="section__title">BIGGEST RED FLAGS</h2>
+                        <p class="section__subtitle">What are your relationship red flags?</p>
+                    </header>
                     
-                    <div class="prompt-container">
-                        <div class="prompt-input-wrapper">
+                    <div class="submission-card">
+                        <form class="submission-form" id="redflag-form">
                             <textarea 
-                                class="prompt-input" 
-                                placeholder="Share your biggest red flag in relationships... bad communication, still friends with ex, no ambition, terrible taste in music..."
+                                class="submission-form__input" 
+                                id="redflag-input"
+                                placeholder="Share your biggest red flag... bad communication, still friends with ex, no ambition..."
                                 rows="4"
+                                maxlength="200"
+                                required
                             ></textarea>
-                            <div class="prompt-actions">
-                                <button class="prompt-btn clear">Clear</button>
-                                <button class="prompt-btn generate">Submit</button>
+                            <div class="submission-form__actions">
+                                <button type="button" class="btn btn--ghost" id="clear-redflag-btn">Clear</button>
+                                <button type="submit" class="btn btn--primary">Submit</button>
                             </div>
-                        </div>
+                        </form>
                         
-                        <div class="prompt-result">
-                            <div class="result-text">
-                                Your red flag will appear here for others to see...
-                            </div>
+                        <div class="submission-result" id="redflag-result">
+                            <p class="submission-result__text">Your red flag will appear here for others to see...</p>
                         </div>
                     </div>
 
-                    <div class="prompt-examples">
-                        <div class="example-title">Common red flags:</div>
-                        <div class="example-chips">
-                            <button class="example-chip">Bad communication</button>
-                            <button class="example-chip">Still friends with ex</button>
-                            <button class="example-chip">No ambition</button>
-                            <button class="example-chip">Terrible music taste</button>
-                            <button class="example-chip">Love bombing</button>
-                            <button class="example-chip">Ghosting</button>
+                    <div class="quick-picks">
+                        <h3 class="quick-picks__title">Common red flags:</h3>
+                        <div class="quick-picks__list" id="redflag-chips">
+                            <button class="chip" data-value="Bad communication">Bad communication</button>
+                            <button class="chip" data-value="Still friends with ex">Still friends with ex</button>
+                            <button class="chip" data-value="No ambition">No ambition</button>
+                            <button class="chip" data-value="Terrible music taste">Terrible music taste</button>
+                            <button class="chip" data-value="Love bombing">Love bombing</button>
+                            <button class="chip" data-value="Ghosting">Ghosting</button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="swipe-indicator">
-                    <div class="swipe-text">Swipe up to see red flags</div>
-                    <div class="swipe-arrow">↑</div>
+                <div class="swipe-hint">
+                    <span class="swipe-hint__text">Swipe up to see red flags</span>
+                    <span class="swipe-hint__arrow" aria-hidden="true">↑</span>
                 </div>
             </section>
 
-            <!-- Section 4: Red Flags Display -->
-            <section class="section redflags-section" data-section="3">
-                <div class="section-content">
-                    <div class="section-header">
-                        <h2 class="section-title">RED FLAGS</h2>
-                        <div class="section-subtitle">What people are saying</div>
-                    </div>
+            <section class="section section--list" data-section="3">
+                <div class="section__content">
+                    <header class="section__header">
+                        <h2 class="section__title">RED FLAGS</h2>
+                        <p class="section__subtitle">What people are saying</p>
+                    </header>
                     
-                    <div class="redflags-container">
-                        <div class="redflags-list">
-                            <!-- Red flags will appear here as users submit them -->
-                        </div>
-                    </div>
+                    <div class="items-list" id="redflags-list"></div>
                 </div>
                 
-                <div class="swipe-indicator">
-                    <div class="swipe-text">Swipe up for music</div>
-                    <div class="swipe-arrow">↑</div>
+                <div class="swipe-hint">
+                    <span class="swipe-hint__text">Swipe up for music</span>
+                    <span class="swipe-hint__arrow" aria-hidden="true">↑</span>
                 </div>
             </section>
 
-            <!-- Section 5: Music Requests -->
-            <section class="section music-section" data-section="4">
-                <div class="section-content">
-                    <div class="section-header">
-                        <h2 class="section-title">R&B VIBES</h2>
-                        <div class="section-subtitle">Request your perfect soundtrack</div>
-                    </div>
+            <section class="section section--music" data-section="4">
+                <div class="section__content">
+                    <header class="section__header">
+                        <h2 class="section__title">R&B VIBES</h2>
+                        <p class="section__subtitle">Request your perfect soundtrack</p>
+                    </header>
                     
-                    <div class="music-container">
-                        <div class="music-tabs">
-                            <button class="tab-btn active" data-tab="request">REQUEST</button>
-                            <button class="tab-btn" data-tab="suggestions">ALL SUGGESTIONS</button>
+                    <div class="tabs-card">
+                        <div class="tabs" role="tablist">
+                            <button class="tab active" role="tab" data-tab="request" aria-selected="true">REQUEST</button>
+                            <button class="tab" role="tab" data-tab="all" aria-selected="false">ALL SUGGESTIONS</button>
                         </div>
                         
-                        <div class="tab-content">
-                            <!-- Request Tab -->
-                            <div class="tab-pane active" id="request-tab">
-                                <div class="music-form">
-                                    <div class="input-group">
-                                        <input type="text" class="music-input" placeholder="Song title" required>
-                                    </div>
-                                    <div class="input-group">
-                                        <input type="text" class="music-input" placeholder="Artist" required>
-                                    </div>
-                                    <div class="input-group">
-                                        <textarea class="music-input music-textarea" placeholder="Special dedication (optional)" rows="3"></textarea>
-                                    </div>
-                                    <button class="submit-btn">SUBMIT REQUEST</button>
-                                </div>
+                        <div class="tabs__content">
+                            <div class="tab-panel active" id="request-panel" role="tabpanel">
+                                <form class="music-form" id="music-form">
+                                    <input type="text" class="form-input" placeholder="Song title" id="song-title" required>
+                                    <input type="text" class="form-input" placeholder="Artist" id="song-artist" required>
+                                    <textarea class="form-input" placeholder="Special dedication (optional)" id="song-dedication" rows="3" maxlength="150"></textarea>
+                                    <button type="submit" class="btn btn--primary btn--block">SUBMIT REQUEST</button>
+                                </form>
                                 
-                                <div class="recent-suggestions">
-                                    <h3>Recent Song Suggestions</h3>
-                                    <div class="suggestions-list">
-                                        <!-- Song suggestions will appear here as users submit them -->
-                                    </div>
+                                <div class="music-list">
+                                    <h3 class="music-list__title">Recent Suggestions</h3>
+                                    <div class="items-list" id="recent-songs"></div>
                                 </div>
                             </div>
                             
-                            <!-- All Suggestions Tab -->
-                            <div class="tab-pane" id="suggestions-tab">
-                                <div class="suggestions-list">
-                                    <!-- All song suggestions will appear here as users submit them -->
-                                </div>
+                            <div class="tab-panel" id="all-panel" role="tabpanel">
+                                <div class="items-list" id="all-songs"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Section 6: Photobooth -->
-            <section class="section photobooth-section" data-section="5">
-                <div class="section-content">
-                    <div class="section-header">
-                        <h2 class="section-title">PHOTOBOOTH</h2>
-                        <div class="section-subtitle">Capture your L'amour moment</div>
-                    </div>
+            <section class="section section--photobooth" data-section="5">
+                <div class="section__content">
+                    <header class="section__header">
+                        <h2 class="section__title">PHOTOBOOTH</h2>
+                        <p class="section__subtitle">Capture your L'amour moment</p>
+                    </header>
                     
-                    <div class="photobooth-container">
-                        <div class="photobooth-canvas-wrapper">
-                            <canvas id="photobooth-canvas" width="400" height="600"></canvas>
-                            <video id="camera-video" style="display: none;"></video>
+                    <div class="photobooth">
+                        <div class="photobooth__canvas-wrapper">
+                            <canvas id="photobooth-canvas" class="photobooth__canvas" width="400" height="600"></canvas>
+                            <video id="camera-video" class="photobooth__video" style="display: none;"></video>
                             <div class="camera-overlay" id="camera-overlay" style="display: none;">
-                                <div class="camera-frame"></div>
-                                <button class="capture-btn" id="capture-btn">
-                                    <span class="btn-icon">📸</span>
+                                <div class="camera-overlay__frame"></div>
+                                <button class="btn btn--primary btn--capture" id="capture-btn">
+                                    <span aria-hidden="true">📸</span>
                                     CAPTURE
                                 </button>
-                                <button class="close-camera-btn" id="close-camera-btn">
-                                    <span class="btn-icon">✕</span>
+                                <button class="btn-close" id="close-camera-btn" aria-label="Close camera">
+                                    <span aria-hidden="true">✕</span>
                                 </button>
                             </div>
                         </div>
                         
-                        <div class="photobooth-controls">
-                            <div class="camera-controls">
-                                <input type="file" id="image-upload" accept="image/*" style="display: none;">
-                                <button class="photobooth-btn primary" id="upload-btn">
-                                    <span class="btn-icon">📷</span>
+                        <div class="photobooth__controls">
+                            <div class="control-group">
+                                <input type="file" id="image-upload" accept="image/*" class="visually-hidden">
+                                <button class="btn btn--primary" id="upload-btn">
+                                    <span aria-hidden="true">📷</span>
                                     UPLOAD PHOTO
                                 </button>
-                                <button class="photobooth-btn secondary" id="camera-btn">
-                                    <span class="btn-icon">📸</span>
+                                <button class="btn btn--secondary" id="camera-btn">
+                                    <span aria-hidden="true">📸</span>
                                     TAKE PHOTO
                                 </button>
                             </div>
                             
-                            <div class="edit-controls">
-                                <button class="edit-btn" id="rotate-btn">
-                                    <span class="btn-icon">↻</span>
+                            <div class="control-group control-group--edit">
+                                <button class="btn btn--ghost btn--sm" id="rotate-btn">
+                                    <span aria-hidden="true">↻</span>
                                     ROTATE
                                 </button>
-                                <button class="edit-btn" id="flip-btn">
-                                    <span class="btn-icon">↔</span>
+                                <button class="btn btn--ghost btn--sm" id="flip-btn">
+                                    <span aria-hidden="true">↔</span>
                                     FLIP
                                 </button>
-                                <button class="edit-btn" id="reset-btn">
-                                    <span class="btn-icon">⟲</span>
+                                <button class="btn btn--ghost btn--sm" id="reset-btn">
+                                    <span aria-hidden="true">⟲</span>
                                     RESET
                                 </button>
                             </div>
                             
-                            <div class="save-controls">
-                                <button class="save-btn" id="download-btn">
-                                    <span class="btn-icon">⬇</span>
+                            <div class="control-group">
+                                <button class="btn btn--accent" id="download-btn">
+                                    <span aria-hidden="true">⬇</span>
                                     DOWNLOAD
                                 </button>
-                                <button class="save-btn" id="share-btn">
-                                    <span class="btn-icon">⤴</span>
+                                <button class="btn btn--accent" id="share-photo-btn">
+                                    <span aria-hidden="true">⤴</span>
                                     SHARE
                                 </button>
                             </div>
                         </div>
                         
-                        <div class="photobooth-instructions">
-                            <h3>How to use:</h3>
-                            <ul>
+                        <div class="info-card">
+                            <h3 class="info-card__title">How to use:</h3>
+                            <ul class="info-card__list">
                                 <li>Upload a photo or take one with your camera</li>
                                 <li>Adjust position with rotate/flip buttons</li>
                                 <li>Download your L'amour photobooth image</li>
@@ -344,14 +280,15 @@
                     </div>
                 </div>
             </section>
-        </div>
+        </main>
 
-        <!-- Floating Action Button -->
-        <div class="floating-mic">
-            <div class="mic-icon">◉</div>
-        </div>
+        <button class="fab" id="fab-btn" aria-label="Quick actions">
+            <span class="fab__icon" aria-hidden="true">◉</span>
+        </button>
     </div>
 
-    <script src="script.js"></script>
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="app.js"></script>
 </body>
 </html>

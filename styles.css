@@ -1,5 +1,14 @@
-/* Mobile-First Responsive Design - Banking App Inspired */
-* {
+/* ===================================
+   L'AMOUR - Modern CSS Architecture
+   Valentine's Event 2026
+   =================================== */
+
+/* ===================================
+   1. CSS RESET & BASE
+   =================================== */
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
