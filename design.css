@@ -12,16 +12,18 @@
 
 /* CSS Variables */
 :root {
-    --color-cream: #F5E6D3;
-    --color-peach: #FFB8A3;
-    --color-orange: #FF5722;
+    --color-cream: #FFF5F5;
+    --color-rose: #FFE4E6;
+    --color-pink: #FF69B4;
+    --color-red: #DC143C;
+    --color-dark-red: #8B0000;
     --color-black: #000000;
     --color-dark-gray: #1a1a1a;
     
     --font-serif: 'Playfair Display', serif;
     --font-sans: 'Inter', sans-serif;
     
-    --gradient-bg: linear-gradient(135deg, #F5E6D3 0%, #FFD4C4 50%, #FFB8A3 100%);
+    --gradient-bg: linear-gradient(135deg, #FFF5F5 0%, #FFE4E6 25%, #FFC0CB 50%, #FFB6C1 75%, #FFA0C9 100%);
 }
 
 /* Base Styles */
@@ -143,7 +145,7 @@ body {
 
 .detail-icon {
     font-size: 1.5rem;
-    color: var(--color-orange);
+    color: var(--color-red);
     line-height: 1;
 }
 
@@ -202,7 +204,7 @@ body {
     font-family: var(--font-serif);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 700;
-    color: var(--color-orange);
+    color: var(--color-red);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -260,7 +262,7 @@ body {
 }
 
 .tickets-btn {
-    background: var(--color-orange);
+    background: var(--color-red);
     color: white;
     border: none;
     padding: 1rem 3rem;
@@ -274,9 +276,9 @@ body {
 }
 
 .tickets-btn:hover {
-    background: #E64A19;
+    background: var(--color-dark-red);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 87, 34, 0.3);
+    box-shadow: 0 8px 24px rgba(220, 20, 60, 0.3);
 }
 
 .social-links {
@@ -294,7 +296,7 @@ body {
 }
 
 .social-links a:hover {
-    color: var(--color-orange);
+    color: var(--color-red);
 }
 
 /* Scroll Indicator */
@@ -330,7 +332,7 @@ body {
 }
 
 .scroll-indicator:hover {
-    background: var(--color-orange);
+    background: var(--color-red);
 }
 
 /* Responsive Design */
