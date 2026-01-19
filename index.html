@@ -158,6 +158,70 @@
         </div>
     </section>
 
+    <!-- Music Suggestion Section -->
+    <section class="music-section" id="music">
+        <div class="music-container">
+            <h2 class="music-title">Community Playlist</h2>
+            <p class="music-subtitle">Suggest songs for the L'amour Valentine's Event</p>
+            
+            <div class="music-content">
+                <!-- Song Request Form -->
+                <div class="music-form-wrapper">
+                    <form class="music-form" id="musicForm">
+                        <div class="form-group">
+                            <label for="songTitle" class="form-label">Song Title</label>
+                            <input 
+                                type="text" 
+                                id="songTitle"
+                                class="form-input"
+                                placeholder="e.g., Love Story"
+                                maxlength="100"
+                                required
+                            />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="artistName" class="form-label">Artist</label>
+                            <input 
+                                type="text" 
+                                id="artistName"
+                                class="form-input"
+                                placeholder="e.g., Taylor Swift"
+                                maxlength="100"
+                                required
+                            />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="songGenre" class="form-label">Genre (Optional)</label>
+                            <select id="songGenre" class="form-select">
+                                <option value="">Select genre...</option>
+                                <option value="Pop">Pop</option>
+                                <option value="R&B">R&B</option>
+                                <option value="Hip-Hop">Hip-Hop</option>
+                                <option value="Rock">Rock</option>
+                                <option value="Jazz">Jazz</option>
+                                <option value="Electronic">Electronic</option>
+                                <option value="Soul">Soul</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn-submit-song">Add to Playlist</button>
+                    </form>
+                </div>
+
+                <!-- Community Playlist Display -->
+                <div class="playlist-display">
+                    <h3 class="playlist-display-title">🎵 Community Requests</h3>
+                    <div class="songs-list" id="songsList">
+                        <!-- Songs will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <script src="app-supabase.js"></script>
 </body>
 </html>
