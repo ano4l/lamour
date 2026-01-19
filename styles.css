@@ -56,11 +56,34 @@ body {
 
 /* Header */
 .header {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.logo-partners {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.partner-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+.logo-x {
+    font-family: var(--font-bold);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-black);
+    opacity: 0.7;
 }
 
 .logo {
@@ -401,6 +424,14 @@ body {
         flex-direction: column;
         gap: 1.5rem;
         align-items: flex-start;
+    }
+    
+    .partner-logo {
+        height: 30px;
+    }
+    
+    .logo-x {
+        font-size: 1rem;
     }
 }
 
