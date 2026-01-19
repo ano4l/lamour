@@ -5,6 +5,12 @@
 
 const SUPABASE_URL = 'https://jbhhvtboinunpuipjvkz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpiaGh2dGJvaW51bnB1aXBqdmt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4Mjg2OTYsImV4cCI6MjA4NDQwNDY5Nn0.VVkcHPqywN0n6weR3xXm7znoBe8hOU4DSNJ5BZvQ8po';
+const SUPABASE_REST_URL = `${SUPABASE_URL}/rest/v1`;
+const SUPABASE_REST_HEADERS = {
+    apikey: SUPABASE_KEY,
+    Authorization: `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json'
+};
 
 let supabase = null;
 
@@ -105,8 +111,8 @@ class RedFlagsManager {
         this.setupEventListeners();
         
         if (!supabase) {
-            console.warn('⚠️ Supabase not available, using local red flags');
-            this.addInitialRedFlags();
+            console.warn('⚠️ Supabase SDK not available, using REST fallback');
+            await this.loadRedFlagsViaRest();
             return;
         }
         
@@ -123,7 +129,7 @@ class RedFlagsManager {
 
     async loadRedFlags() {
         if (!supabase) {
-            this.addInitialRedFlags();
+            await this.loadRedFlagsViaRest();
             return;
         }
         
@@ -136,7 +142,7 @@ class RedFlagsManager {
 
             if (error) {
                 console.error('❌ Error loading red flags:', error.message);
-                this.addInitialRedFlags();
+                await this.loadRedFlagsViaRest();
                 return;
             }
 
@@ -152,6 +158,28 @@ class RedFlagsManager {
             }
         } catch (error) {
             console.error('❌ Error in loadRedFlags:', error);
+            await this.loadRedFlagsViaRest();
+        }
+    }
+
+    async loadRedFlagsViaRest() {
+        try {
+            const response = await fetch(`${SUPABASE_REST_URL}/red_flags?select=*` + '&order=created_at.desc&limit=20', {
+                headers: SUPABASE_REST_HEADERS
+            });
+            if (!response.ok) {
+                throw new Error(`REST load failed: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data && data.length > 0) {
+                console.log(`📊 Loaded ${data.length} red flags via REST`);
+                data.forEach(flag => this.displayRedFlag(flag.text));
+                this.redFlags = data.map(f => f.text);
+            } else {
+                this.addInitialRedFlags();
+            }
+        } catch (error) {
+            console.error('❌ REST fallback failed, using initial red flags:', error);
             this.addInitialRedFlags();
         }
     }
@@ -254,7 +282,8 @@ class RedFlagsManager {
         this.redFlags.unshift(text);
         
         if (!supabase) {
-            console.log('💾 Supabase not available, red flag saved locally only');
+            console.log('💾 Supabase SDK not available, using REST fallback');
+            await this.submitRedFlagViaRest(text);
             return;
         }
         
@@ -265,11 +294,29 @@ class RedFlagsManager {
 
             if (error) {
                 console.error('❌ Error submitting red flag to Supabase:', error.message);
+                await this.submitRedFlagViaRest(text);
             } else {
                 console.log('✅ Red flag saved to Supabase');
             }
         } catch (error) {
             console.error('❌ Error in submitRedFlag:', error);
+            await this.submitRedFlagViaRest(text);
+        }
+    }
+
+    async submitRedFlagViaRest(text) {
+        try {
+            const response = await fetch(`${SUPABASE_REST_URL}/red_flags`, {
+                method: 'POST',
+                headers: SUPABASE_REST_HEADERS,
+                body: JSON.stringify({ text })
+            });
+            if (!response.ok) {
+                throw new Error(`REST insert failed: ${response.status}`);
+            }
+            console.log('✅ Red flag saved via REST fallback');
+        } catch (error) {
+            console.error('❌ REST fallback insert failed:', error);
         }
     }
 

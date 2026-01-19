@@ -183,80 +183,10 @@
             setInterval(updateCountdown, 1000);
         }
         
-        // Inline red flags handler
-        function setupRedFlags() {
-            const form = document.getElementById('redflagForm');
-            const input = document.getElementById('redflagInput');
-            const charCount = document.getElementById('charCount');
-            const list = document.getElementById('redflagsList');
-            
-            // Character counter
-            if (input && charCount) {
-                input.addEventListener('input', (e) => {
-                    charCount.textContent = `${e.target.value.length}/150`;
-                });
-            }
-            
-            // Form submission
-            if (form && input && list) {
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const text = input.value.trim();
-                    if (text) {
-                        displayRedFlag(text);
-                        input.value = '';
-                        charCount.textContent = '0/150';
-                    }
-                });
-            }
-            
-            // Quick pick buttons
-            document.querySelectorAll('.quick-pick-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const text = btn.dataset.text;
-                    if (text) {
-                        displayRedFlag(text);
-                    }
-                });
-            });
-            
-            function displayRedFlag(text) {
-                const item = document.createElement('div');
-                item.className = 'redflag-item';
-                item.innerHTML = `
-                    <span class="redflag-emoji">🚩</span>
-                    <span class="redflag-text">"${text}"</span>
-                `;
-                list.insertBefore(item, list.firstChild);
-                
-                // Keep only last 20
-                while (list.children.length > 20) {
-                    list.removeChild(list.lastChild);
-                }
-            }
-            
-            // Add initial red flags
-            const initialFlags = [
-                'Bad communication',
-                'Ghosting without explanation',
-                'Still friends with ex',
-                'Love bombing',
-                'No ambition or goals',
-                'Terrible music taste'
-            ];
-            initialFlags.forEach(flag => displayRedFlag(flag));
-        }
-        
-        // Start everything when DOM is ready
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                startCountdown();
-                setupRedFlags();
-            });
+            document.addEventListener('DOMContentLoaded', startCountdown);
         } else {
             startCountdown();
-            setupRedFlags();
         }
     </script>
     <script src="app-supabase.js"></script>
