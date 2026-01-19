@@ -42,19 +42,26 @@ class SwipableUI {
 
     setupTouchEvents() {
         const container = document.querySelector('.mobile-container');
+        let touchStartTime = 0;
         
         // Touch Start
         container.addEventListener('touchstart', (e) => {
             if (this.isAnimating) return;
+            touchStartTime = Date.now();
             this.startY = e.touches[0].clientY;
             this.currentY = this.startY;
             this.isDragging = true;
             this.wrapper.style.transition = 'none';
         }, { passive: true });
 
-        // Touch Move - Real-time drag feedback
+        // Touch Move - Real-time drag feedback with throttling
+        let lastMoveTime = 0;
         container.addEventListener('touchmove', (e) => {
             if (!this.isDragging || this.isAnimating) return;
+            
+            const now = Date.now();
+            if (now - lastMoveTime < 16) return; // Throttle to ~60fps
+            lastMoveTime = now;
             
             this.currentY = e.touches[0].clientY;
             const diff = this.currentY - this.startY;
@@ -573,82 +580,33 @@ class SwipableUI {
     }
 
     loadTemplate(ctx, canvas) {
-        // Clear canvas
-        ctx.fillStyle = '#FFF5EE';
+        // Clear canvas with gradient background
+        const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        bgGradient.addColorStop(0, '#FF1493');
+        bgGradient.addColorStop(1, '#8B008B');
+        ctx.fillStyle = bgGradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Draw pink gradient background at top
-        const topGradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.3);
-        topGradient.addColorStop(0, '#FFB6C1');
-        topGradient.addColorStop(1, 'transparent');
-        ctx.fillStyle = topGradient;
-        ctx.fillRect(0, 0, canvas.width, canvas.height * 0.3);
-
-        // Left section background (cream/white)
-        ctx.fillStyle = '#FFF5EE';
-        ctx.fillRect(0, 0, canvas.width * 0.45, canvas.height);
-
-        // Draw vertical divider line
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(canvas.width * 0.45, 0);
-        ctx.lineTo(canvas.width * 0.45, canvas.height);
-        ctx.stroke();
-
-        // Left side text - L'AMOUR
-        ctx.fillStyle = '#000000';
-        ctx.font = 'bold 32px Inter';
-        ctx.textAlign = 'center';
-        ctx.fillText("L'AMOUR", canvas.width * 0.225, 50);
+        // Simple frame - just a border around the photo area
+        const padding = 40;
+        const photoFrameX = padding;
+        const photoFrameY = padding;
+        const photoFrameWidth = canvas.width - (padding * 2);
+        const photoFrameHeight = canvas.height - (padding * 2) - 80; // Leave space for text at bottom
         
-        ctx.font = '14px Inter';
-        ctx.fillText("VALENTINES EVENT", canvas.width * 0.225, 70);
-
-        // Add logos placeholder (you'll need actual logo images)
-        ctx.fillStyle = '#FF1493';
-        ctx.font = 'bold 16px Inter';
-        ctx.fillText("SORAH", canvas.width * 0.225, 110);
-        ctx.fillText("L&T", canvas.width * 0.225, 150);
-
-        // Photo frame area on left (empty space for photo)
-        const photoFrameX = canvas.width * 0.05;
-        const photoFrameY = canvas.height * 0.45;
-        const photoFrameWidth = canvas.width * 0.35;
-        const photoFrameHeight = canvas.height * 0.35;
-        
-        // Draw photo frame border
-        ctx.strokeStyle = '#FFB6C1';
-        ctx.lineWidth = 3;
+        // Draw simple white border frame
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 8;
         ctx.strokeRect(photoFrameX, photoFrameY, photoFrameWidth, photoFrameHeight);
 
-        // Add decorative heart at bottom of frame
-        ctx.fillStyle = '#FF1493';
-        ctx.font = '24px Arial';
-        ctx.fillText('💗', photoFrameX + photoFrameWidth - 20, photoFrameY + photoFrameHeight + 20);
-
-        // Right side text
+        // Add event text at bottom
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 24px Inter';
         ctx.textAlign = 'center';
-        ctx.fillStyle = '#000000';
-        ctx.font = 'bold 20px Inter';
-        ctx.fillText('02.14.26  15:00', canvas.width * 0.725, 50);
+        ctx.fillText("L'AMOUR", canvas.width / 2, canvas.height - 50);
         
-        ctx.font = '12px Inter';
-        ctx.fillText('SATURDAY TILL LATE', canvas.width * 0.725, 70);
-
-        // Handwritten style text
-        ctx.font = 'italic 18px Georgia';
-        ctx.fillText('Do you HAVE', canvas.width * 0.725, 120);
-        ctx.fillText('A VALENTINE?', canvas.width * 0.725, 145);
-
-        // Event details on right
-        ctx.font = 'bold 14px Inter';
-        ctx.fillText('LIMITED TICKETS', canvas.width * 0.725, 190);
-        
-        ctx.font = '12px Inter';
-        ctx.fillText('99 JUTA ST, BRAAM', canvas.width * 0.725, 215);
-        ctx.fillText('SORAH X', canvas.width * 0.725, 240);
-        ctx.fillText('L&T EVENTS', canvas.width * 0.725, 260);
+        ctx.font = '16px Inter';
+        ctx.fillText("VALENTINE'S EVENT 2026", canvas.width / 2, canvas.height - 25);
 
         // Store photo frame coordinates for later use
         this.photoFrameCoords = {
@@ -661,80 +619,6 @@ class SwipableUI {
         this.templateLoaded = true;
     }
 
-    loadLogosAndRedraw(ctx, canvas) {
-        if (!this.templateLoaded) return;
-
-        // Redraw the base template
-        this.loadTemplate(ctx, canvas);
-
-        // Load and draw logos (you'll need to provide the logo URLs or base64 data)
-        this.drawLogos(ctx, canvas);
-    }
-
-    drawLogos(ctx, canvas) {
-        // Logo positions based on your template
-        // Top logo position
-        const topLogoX = canvas.width / 2 - 60;
-        const topLogoY = 100;
-        
-        // Bottom logo position  
-        const bottomLogoX = canvas.width / 2 - 60;
-        const bottomLogoY = canvas.height - 80;
-
-        // Draw logos if loaded, otherwise show placeholders
-        if (this.logos.top) {
-            ctx.drawImage(this.logos.top, topLogoX, topLogoY, 120, 40);
-        } else {
-            // Placeholder for top logo
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.fillRect(topLogoX, topLogoY, 120, 40);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-            ctx.font = '12px Inter';
-            ctx.fillText('TOP LOGO', canvas.width / 2, topLogoY + 25);
-        }
-
-        if (this.logos.bottom) {
-            ctx.drawImage(this.logos.bottom, bottomLogoX, bottomLogoY, 120, 40);
-        } else {
-            // Placeholder for bottom logo
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.fillRect(bottomLogoX, bottomLogoY, 120, 40);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-            ctx.fillText('BOTTOM LOGO', canvas.width / 2, bottomLogoY + 25);
-        }
-    }
-
-    loadLogos(topLogoSrc, bottomLogoSrc) {
-        // Load top logo
-        if (topLogoSrc) {
-            const topImg = new Image();
-            topImg.onload = () => {
-                this.logos.top = topImg;
-                // Redraw canvas if there's a photo loaded
-                if (this.photoboothImage) {
-                    const canvas = document.getElementById('photobooth-canvas');
-                    const ctx = canvas.getContext('2d');
-                    this.drawImage(ctx, canvas, this.photoboothImage);
-                }
-            };
-            topImg.src = topLogoSrc;
-        }
-
-        // Load bottom logo
-        if (bottomLogoSrc) {
-            const bottomImg = new Image();
-            bottomImg.onload = () => {
-                this.logos.bottom = bottomImg;
-                // Redraw canvas if there's a photo loaded
-                if (this.photoboothImage) {
-                    const canvas = document.getElementById('photobooth-canvas');
-                    const ctx = canvas.getContext('2d');
-                    this.drawImage(ctx, canvas, this.photoboothImage);
-                }
-            };
-            bottomImg.src = bottomLogoSrc;
-        }
-    }
 
     loadImage(file, ctx, canvas) {
         const reader = new FileReader();
@@ -755,16 +639,6 @@ class SwipableUI {
     drawImage(ctx, canvas, img) {
         // First draw the template background
         this.loadTemplate(ctx, canvas);
-
-        // If we have photo frame coordinates, use them
-        if (!this.photoFrameCoords) {
-            this.photoFrameCoords = {
-                x: canvas.width * 0.05,
-                y: canvas.height * 0.45,
-                width: canvas.width * 0.35,
-                height: canvas.height * 0.35
-            };
-        }
 
         // Save context state
         ctx.save();
@@ -809,9 +683,9 @@ class SwipableUI {
         // Restore context state
         ctx.restore();
 
-        // Redraw frame border on top of photo
-        ctx.strokeStyle = '#FFB6C1';
-        ctx.lineWidth = 3;
+        // Redraw simple white border on top of photo
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 8;
         ctx.strokeRect(
             this.photoFrameCoords.x,
             this.photoFrameCoords.y,
@@ -819,14 +693,14 @@ class SwipableUI {
             this.photoFrameCoords.height
         );
 
-        // Redraw decorative heart
-        ctx.fillStyle = '#FF1493';
-        ctx.font = '24px Arial';
-        ctx.textAlign = 'left';
-        ctx.fillText('💗', 
-            this.photoFrameCoords.x + this.photoFrameCoords.width - 20, 
-            this.photoFrameCoords.y + this.photoFrameCoords.height + 20
-        );
+        // Redraw event text at bottom
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 24px Inter';
+        ctx.textAlign = 'center';
+        ctx.fillText("L'AMOUR", canvas.width / 2, canvas.height - 50);
+        
+        ctx.font = '16px Inter';
+        ctx.fillText("VALENTINE'S EVENT 2026", canvas.width / 2, canvas.height - 25);
     }
 
     rotateImage(ctx, canvas) {
@@ -916,53 +790,31 @@ class SwipableUI {
     showNotification(message, type = 'info') {
         // Remove existing notification
         const existing = document.querySelector('.notification');
-        if (existing) existing.remove();
+        if (existing) {
+            existing.remove();
+        }
 
         // Create notification
         const notification = document.createElement('div');
         notification.className = 'notification';
         notification.textContent = message;
+        notification.setAttribute('role', 'alert');
+        notification.setAttribute('aria-live', 'polite');
         
-        // Style based on type
-        const colors = {
-            success: 'linear-gradient(135deg, #EC4899, #BE185D)',
-            error: 'linear-gradient(135deg, #BE185D, #EC4899)',
-            info: 'linear-gradient(135deg, #8B5CF6, #7C3AED)'
-        };
-
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: ${colors[type]};
-            color: white;
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-weight: 500;
-            font-size: 14px;
-            z-index: 10000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.3s ease;
-        `;
-
-        // Add animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideDown {
-                from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
-                to { transform: translateX(-50%) translateY(0); opacity: 1; }
-            }
-        `;
-        document.head.appendChild(style);
-
         document.body.appendChild(notification);
 
-        // Auto remove
-        setTimeout(() => {
-            notification.style.animation = 'slideDown 0.3s ease reverse';
-            setTimeout(() => notification.remove(), 300);
+        // Auto remove after 3 seconds
+        const timeoutId = setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
         }, 3000);
+
+        // Allow manual dismissal
+        notification.addEventListener('click', () => {
+            clearTimeout(timeoutId);
+            notification.remove();
+        });
     }
 }
 
