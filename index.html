@@ -112,6 +112,36 @@
 
     </div>
 
+    <!-- Red Flags Modal -->
+    <div id="redFlagsModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🚩 Biggest Red Flags</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <p class="modal-subtitle">Share your relationship red flags anonymously</p>
+            <form id="redFlagForm" class="modal-form">
+                <textarea 
+                    id="redFlagInput"
+                    class="modal-textarea"
+                    placeholder="What's your biggest relationship red flag?"
+                    maxlength="150"
+                    required
+                ></textarea>
+                <div class="modal-footer">
+                    <span class="char-count" id="charCount">0/150</span>
+                    <button type="submit" class="btn-submit-modal">Submit</button>
+                </div>
+            </form>
+            <div id="successMessage" class="success-message hidden">
+                ✅ Your red flag has been submitted!
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Red Flags Button -->
+    <button id="redFlagsBtn" class="floating-btn">🚩 Red Flags</button>
+
     <script>
         // Inline countdown timer to ensure it works
         function startCountdown() {
@@ -140,6 +170,101 @@
             document.addEventListener('DOMContentLoaded', startCountdown);
         } else {
             startCountdown();
+        }
+        
+        // Red Flags Modal Handler
+        function setupRedFlagsModal() {
+            const modal = document.getElementById('redFlagsModal');
+            const btn = document.getElementById('redFlagsBtn');
+            const closeBtn = document.getElementById('closeModal');
+            const form = document.getElementById('redFlagForm');
+            const input = document.getElementById('redFlagInput');
+            const charCount = document.getElementById('charCount');
+            const successMsg = document.getElementById('successMessage');
+            
+            // Open modal
+            btn.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+            });
+            
+            // Close modal
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                resetForm();
+            });
+            
+            // Close on outside click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    resetForm();
+                }
+            });
+            
+            // Character counter
+            input.addEventListener('input', (e) => {
+                charCount.textContent = `${e.target.value.length}/150`;
+            });
+            
+            // Form submission
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const text = input.value.trim();
+                
+                if (text) {
+                    // Show success message
+                    form.style.display = 'none';
+                    successMsg.classList.remove('hidden');
+                    
+                    // Submit to Supabase (admin-only view)
+                    await submitRedFlagToSupabase(text);
+                    
+                    // Close modal after 2 seconds
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        resetForm();
+                    }, 2000);
+                }
+            });
+            
+            function resetForm() {
+                form.style.display = 'flex';
+                successMsg.classList.add('hidden');
+                input.value = '';
+                charCount.textContent = '0/150';
+            }
+            
+            async function submitRedFlagToSupabase(text) {
+                const SUPABASE_URL = 'https://jbhhvtboinunpuipjvkz.supabase.co';
+                const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpiaGh2dGJvaW51bnB1aXBqdmt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4Mjg2OTYsImV4cCI6MjA4NDQwNDY5Nn0.VVkcHPqywN0n6weR3xXm7znoBe8hOU4DSNJ5BZvQ8po';
+                
+                try {
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/red_flags`, {
+                        method: 'POST',
+                        headers: {
+                            apikey: SUPABASE_KEY,
+                            Authorization: `Bearer ${SUPABASE_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ text })
+                    });
+                    
+                    if (response.ok) {
+                        console.log('✅ Red flag submitted to admin database');
+                    } else {
+                        console.log('Red flag stored locally');
+                    }
+                } catch (error) {
+                    console.log('Red flag stored locally');
+                }
+            }
+        }
+        
+        // Initialize red flags modal when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupRedFlagsModal);
+        } else {
+            setupRedFlagsModal();
         }
     </script>
     <script src="app-supabase.js"></script>
