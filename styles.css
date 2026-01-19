@@ -280,6 +280,68 @@ body {
     color: var(--color-black);
 }
 
+/* Playlist Section */
+.playlist-container {
+    max-width: 300px;
+}
+
+.playlist-title {
+    font-family: var(--font-bold);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-black);
+    margin-bottom: 1rem;
+}
+
+.playlist-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.playlist-link:hover {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: var(--color-red);
+    transform: translateY(-2px);
+}
+
+.playlist-cover {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.playlist-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.playlist-label {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.playlist-service {
+    font-family: var(--font-bold);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-black);
+}
+
 /* Footer */
 .footer {
     display: flex;
@@ -287,6 +349,12 @@ body {
     align-items: center;
     padding-top: 2rem;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.footer-left,
+.footer-right {
+    display: flex;
+    align-items: center;
 }
 
 .tickets-btn {
@@ -424,6 +492,15 @@ body {
         flex-direction: column;
         gap: 1.5rem;
         align-items: flex-start;
+    }
+    
+    .footer-left,
+    .footer-right {
+        width: 100%;
+    }
+    
+    .playlist-container {
+        max-width: 100%;
     }
     
     .partner-logo {
