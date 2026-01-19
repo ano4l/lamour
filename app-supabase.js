@@ -45,10 +45,6 @@ class CountdownTimer {
             minutes: document.getElementById('minutes'),
             seconds: document.getElementById('seconds')
         };
-        this.init();
-    }
-
-    init() {
         this.updateCountdown();
         setInterval(() => this.updateCountdown(), 1000);
     }
