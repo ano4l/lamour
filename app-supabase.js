@@ -45,8 +45,12 @@ class CountdownTimer {
             minutes: document.getElementById('minutes'),
             seconds: document.getElementById('seconds')
         };
+        console.log('✅ Countdown timer initialized');
         this.updateCountdown();
-        setInterval(() => this.updateCountdown(), 1000);
+        setInterval(() => {
+            console.log('🔄 Updating countdown...');
+            this.updateCountdown();
+        }, 1000);
     }
 
     updateCountdown() {
@@ -70,6 +74,7 @@ class CountdownTimer {
         this.elements.hours.textContent = String(hours).padStart(2, '0');
         this.elements.minutes.textContent = String(minutes).padStart(2, '0');
         this.elements.seconds.textContent = String(seconds).padStart(2, '0');
+        console.log(`🕰️ Countdown updated: ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`);
     }
 }
 
