@@ -60,14 +60,11 @@ class ToastManager {
 }
 
 // ===================================
-// 3. NAVIGATION CONTROLLER
+// 3. NAVIGATION CONTROLLER (Scroll-based)
 // ===================================
 class NavigationController {
     constructor() {
-        this.currentSection = 0;
-        this.totalSections = 6;
-        this.isAnimating = false;
-        this.wrapper = document.querySelector('.sections-wrapper');
+        this.sections = document.querySelectorAll('.section');
         this.dots = document.querySelectorAll('.nav-dot');
         
         this.init();
@@ -75,120 +72,44 @@ class NavigationController {
 
     init() {
         this.setupDotNavigation();
-        this.setupTouchGestures();
-        this.setupWheelNavigation();
-        this.goToSection(0);
+        this.setupScrollSpy();
     }
 
     setupDotNavigation() {
         this.dots.forEach((dot, index) => {
             dot.addEventListener('click', () => {
-                if (!this.isAnimating) {
-                    this.goToSection(index);
+                const section = this.sections[index];
+                if (section) {
+                    section.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
         });
     }
 
-    setupTouchGestures() {
-        let startY = 0;
-        let currentY = 0;
-        let isDragging = false;
-
-        const container = document.querySelector('.app-container');
-
-        const handleTouchStart = (e) => {
-            if (this.isAnimating) return;
-            startY = e.touches ? e.touches[0].clientY : e.clientY;
-            currentY = startY;
-            isDragging = true;
-            this.wrapper.style.transition = 'none';
+    setupScrollSpy() {
+        const observerOptions = {
+            root: null,
+            rootMargin: '-50% 0px -50% 0px',
+            threshold: 0
         };
 
-        const handleTouchMove = Utils.throttle((e) => {
-            if (!isDragging || this.isAnimating) return;
-            
-            currentY = e.touches ? e.touches[0].clientY : e.clientY;
-            const diff = currentY - startY;
-            const baseOffset = -this.currentSection * window.innerHeight;
-            
-            let resistance = 1;
-            if ((this.currentSection === 0 && diff > 0) || 
-                (this.currentSection === this.totalSections - 1 && diff < 0)) {
-                resistance = 0.3;
-            }
-            
-            const newOffset = baseOffset + (diff * resistance);
-            this.wrapper.style.transform = `translateY(${newOffset}px)`;
-        }, 16);
-
-        const handleTouchEnd = () => {
-            if (!isDragging) return;
-            isDragging = false;
-            
-            const diff = currentY - startY;
-            const threshold = 80;
-            
-            this.wrapper.style.transition = 'transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            
-            if (Math.abs(diff) > threshold) {
-                if (diff < 0 && this.currentSection < this.totalSections - 1) {
-                    this.goToSection(this.currentSection + 1);
-                } else if (diff > 0 && this.currentSection > 0) {
-                    this.goToSection(this.currentSection - 1);
-                } else {
-                    this.goToSection(this.currentSection);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = Array.from(this.sections).indexOf(entry.target);
+                    this.dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
                 }
-            } else {
-                this.goToSection(this.currentSection);
-            }
-        };
+            });
+        }, observerOptions);
 
-        container.addEventListener('touchstart', handleTouchStart, { passive: true });
-        container.addEventListener('touchmove', handleTouchMove, { passive: true });
-        container.addEventListener('touchend', handleTouchEnd, { passive: true });
-
-        container.addEventListener('mousedown', handleTouchStart);
-        container.addEventListener('mousemove', handleTouchMove);
-        container.addEventListener('mouseup', handleTouchEnd);
-        container.addEventListener('mouseleave', () => {
-            if (isDragging) {
-                handleTouchEnd();
-            }
+        this.sections.forEach(section => {
+            observer.observe(section);
         });
-    }
-
-    setupWheelNavigation() {
-        const container = document.querySelector('.app-container');
-        container.addEventListener('wheel', Utils.debounce((e) => {
-            e.preventDefault();
-            if (this.isAnimating) return;
-            
-            if (e.deltaY > 30 && this.currentSection < this.totalSections - 1) {
-                this.goToSection(this.currentSection + 1);
-            } else if (e.deltaY < -30 && this.currentSection > 0) {
-                this.goToSection(this.currentSection - 1);
-            }
-        }, 100), { passive: false });
-    }
-
-    goToSection(index) {
-        if (index < 0 || index >= this.totalSections) return;
-        
-        this.isAnimating = true;
-        this.currentSection = index;
-        
-        const offset = -index * window.innerHeight;
-        this.wrapper.style.transition = 'transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        this.wrapper.style.transform = `translateY(${offset}px)`;
-        
-        this.dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
-        });
-        
-        setTimeout(() => {
-            this.isAnimating = false;
-        }, 400);
     }
 }
 
