@@ -82,7 +82,8 @@
                 </div>
                 
                 <div class="playlist-container">
-                    <h3 class="playlist-title">Playlist of the Week</h3>
+                    <h3 class="playlist-title">🎵 Playlist of the Week</h3>
+                    <p class="playlist-description">Curated love songs to set the mood for Valentine's</p>
                     <a href="https://music.apple.com/za/playlist/lamour-potw/pl.u-yZyV4B1Cd9jXBgL" target="_blank" rel="noopener" class="playlist-link">
                         <img src="Cover.jpg" alt="L'amour Playlist" class="playlist-cover">
                         <div class="playlist-info">
@@ -90,6 +91,20 @@
                             <span class="playlist-service">Apple Music</span>
                         </div>
                     </a>
+                    <div class="playlist-features">
+                        <div class="playlist-feature">
+                            <span class="feature-icon">🎶</span>
+                            <span class="feature-text">30+ Love Songs</span>
+                        </div>
+                        <div class="playlist-feature">
+                            <span class="feature-icon">💕</span>
+                            <span class="feature-text">Perfect for the Event</span>
+                        </div>
+                        <div class="playlist-feature">
+                            <span class="feature-icon">🔥</span>
+                            <span class="feature-text">Updated Weekly</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -158,70 +173,37 @@
         </div>
     </section>
 
-    <!-- Music Suggestion Section -->
-    <section class="music-section" id="music">
-        <div class="music-container">
-            <h2 class="music-title">Community Playlist</h2>
-            <p class="music-subtitle">Suggest songs for the L'amour Valentine's Event</p>
+    <script>
+        // Inline countdown timer to ensure it works
+        function startCountdown() {
+            const targetDate = new Date('2026-02-14T15:00:00').getTime();
             
-            <div class="music-content">
-                <!-- Song Request Form -->
-                <div class="music-form-wrapper">
-                    <form class="music-form" id="musicForm">
-                        <div class="form-group">
-                            <label for="songTitle" class="form-label">Song Title</label>
-                            <input 
-                                type="text" 
-                                id="songTitle"
-                                class="form-input"
-                                placeholder="e.g., Love Story"
-                                maxlength="100"
-                                required
-                            />
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="artistName" class="form-label">Artist</label>
-                            <input 
-                                type="text" 
-                                id="artistName"
-                                class="form-input"
-                                placeholder="e.g., Taylor Swift"
-                                maxlength="100"
-                                required
-                            />
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="songGenre" class="form-label">Genre (Optional)</label>
-                            <select id="songGenre" class="form-select">
-                                <option value="">Select genre...</option>
-                                <option value="Pop">Pop</option>
-                                <option value="R&B">R&B</option>
-                                <option value="Hip-Hop">Hip-Hop</option>
-                                <option value="Rock">Rock</option>
-                                <option value="Jazz">Jazz</option>
-                                <option value="Electronic">Electronic</option>
-                                <option value="Soul">Soul</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <button type="submit" class="btn-submit-song">Add to Playlist</button>
-                    </form>
-                </div>
-
-                <!-- Community Playlist Display -->
-                <div class="playlist-display">
-                    <h3 class="playlist-display-title">🎵 Community Requests</h3>
-                    <div class="songs-list" id="songsList">
-                        <!-- Songs will be added here dynamically -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+        
+        // Start countdown when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startCountdown);
+        } else {
+            startCountdown();
+        }
+    </script>
     <script src="app-supabase.js"></script>
 </body>
 </html>
