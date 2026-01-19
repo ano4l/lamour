@@ -79,9 +79,6 @@
             <a href="https://www.howler.co.za/events/l-amour-1299" target="_blank" rel="noopener" class="tickets-btn">
                 Buy Tickets
             </a>
-            <button class="create-card-btn" id="scrollToCard">
-                Create Your Card
-            </button>
             <div class="social-links">
                 <a href="https://www.instagram.com/l.t.events" target="_blank" rel="noopener">@l.t.events</a>
                 <span>•</span>
@@ -91,54 +88,48 @@
 
     </div>
 
-    <!-- Card Creator Section -->
-    <section class="card-creator-section" id="cardCreator">
-        <div class="card-creator-container">
-            <h2 class="card-creator-title">Create Your Valentine's Card</h2>
-            <p class="card-creator-subtitle">Personalize your invitation with a photo and custom message</p>
+    <!-- Red Flags Section -->
+    <section class="redflags-section" id="redflags">
+        <div class="redflags-container">
+            <h2 class="redflags-title">Biggest Red Flags</h2>
+            <p class="redflags-subtitle">Share your relationship red flags anonymously</p>
             
-            <div class="card-creator-content">
-                <!-- Controls Panel -->
-                <div class="card-controls">
-                    <div class="control-group">
-                        <label for="customText" class="control-label">Your Message</label>
-                        <input 
-                            type="text" 
-                            id="customText" 
-                            class="control-input"
-                            placeholder="Enter your name or message..."
-                            maxlength="50"
-                        />
-                        <small class="control-hint">Appears above "Do you have a valentine?"</small>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="imageUpload" class="control-label">Upload Your Photo</label>
-                        <input 
-                            type="file" 
-                            id="imageUpload" 
-                            accept="image/*"
-                            class="control-file-input"
-                            style="display: none;"
-                        />
-                        <button class="control-file-btn" id="uploadBtn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-                            </svg>
-                            Choose Photo
-                        </button>
-                        <small class="control-hint">Photo appears in bottom left corner</small>
-                    </div>
-
-                    <div class="control-actions">
-                        <button class="btn-secondary" id="resetCard">Reset</button>
-                        <button class="btn-primary" id="downloadCard">Download Card</button>
+            <div class="redflags-content">
+                <!-- Submission Form -->
+                <div class="redflags-form-wrapper">
+                    <form class="redflags-form" id="redflagForm">
+                        <textarea 
+                            id="redflagInput"
+                            class="redflags-textarea"
+                            placeholder="What's your biggest relationship red flag?"
+                            maxlength="150"
+                            required
+                        ></textarea>
+                        <div class="redflags-form-footer">
+                            <span class="char-count" id="charCount">0/150</span>
+                            <button type="submit" class="btn-submit">Submit Red Flag</button>
+                        </div>
+                    </form>
+                    
+                    <div class="quick-picks">
+                        <h3 class="quick-picks-title">Quick picks:</h3>
+                        <div class="quick-picks-grid">
+                            <button class="quick-pick-btn" data-text="Bad communication">💔 Bad communication</button>
+                            <button class="quick-pick-btn" data-text="Ghosting">👻 Ghosting</button>
+                            <button class="quick-pick-btn" data-text="Love bombing">💣 Love bombing</button>
+                            <button class="quick-pick-btn" data-text="Still friends with ex">📱 Still friends with ex</button>
+                            <button class="quick-pick-btn" data-text="No ambition">🎯 No ambition</button>
+                            <button class="quick-pick-btn" data-text="Terrible music taste">🎵 Terrible music taste</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Canvas Preview -->
-                <div class="card-preview">
-                    <canvas id="cardCanvas" width="800" height="800"></canvas>
+                <!-- Red Flags Display -->
+                <div class="redflags-display">
+                    <h3 class="redflags-display-title">Recent Red Flags</h3>
+                    <div class="redflags-list" id="redflagsList">
+                        <!-- Red flags will be added here dynamically -->
+                    </div>
                 </div>
             </div>
         </div>
