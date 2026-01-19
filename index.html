@@ -79,6 +79,9 @@
             <a href="https://www.howler.co.za/events/l-amour-1299" target="_blank" rel="noopener" class="tickets-btn">
                 Buy Tickets
             </a>
+            <button class="create-card-btn" id="scrollToCard">
+                Create Your Card
+            </button>
             <div class="social-links">
                 <a href="https://www.instagram.com/l.t.events" target="_blank" rel="noopener">@l.t.events</a>
                 <span>•</span>
@@ -87,6 +90,59 @@
         </footer>
 
     </div>
+
+    <!-- Card Creator Section -->
+    <section class="card-creator-section" id="cardCreator">
+        <div class="card-creator-container">
+            <h2 class="card-creator-title">Create Your Valentine's Card</h2>
+            <p class="card-creator-subtitle">Personalize your invitation with a photo and custom message</p>
+            
+            <div class="card-creator-content">
+                <!-- Controls Panel -->
+                <div class="card-controls">
+                    <div class="control-group">
+                        <label for="customText" class="control-label">Your Message</label>
+                        <input 
+                            type="text" 
+                            id="customText" 
+                            class="control-input"
+                            placeholder="Enter your name or message..."
+                            maxlength="50"
+                        />
+                        <small class="control-hint">Appears above "Do you have a valentine?"</small>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="imageUpload" class="control-label">Upload Your Photo</label>
+                        <input 
+                            type="file" 
+                            id="imageUpload" 
+                            accept="image/*"
+                            class="control-file-input"
+                            style="display: none;"
+                        />
+                        <button class="control-file-btn" id="uploadBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                            </svg>
+                            Choose Photo
+                        </button>
+                        <small class="control-hint">Photo appears in bottom left corner</small>
+                    </div>
+
+                    <div class="control-actions">
+                        <button class="btn-secondary" id="resetCard">Reset</button>
+                        <button class="btn-primary" id="downloadCard">Download Card</button>
+                    </div>
+                </div>
+
+                <!-- Canvas Preview -->
+                <div class="card-preview">
+                    <canvas id="cardCanvas" width="800" height="800"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script src="app.js"></script>
 </body>
