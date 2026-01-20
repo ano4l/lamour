@@ -833,8 +833,8 @@ body {
 /* Card Container - HTML/CSS Overlay Approach */
 .card-container {
     position: relative;
-    width: 512px;
-    height: 768px;
+    width: 320px;
+    height: 480px;
     margin: 0 auto;
     border-radius: 8px;
     overflow: hidden;
@@ -852,28 +852,28 @@ body {
 
 .card-photo {
     position: absolute;
-    left: 166px;
-    top: 307.5px;
-    width: 180px;
-    height: 180px;
+    left: 103.75px;
+    top: 192.19px;
+    width: 112.5px;
+    height: 112.5px;
     object-fit: cover;
     border-radius: 2px;
 }
 
 .card-name {
     position: absolute;
-    left: 155px;
-    top: 585px;
-    width: 220px;
+    left: 96.88px;
+    top: 365.63px;
+    width: 137.5px;
     font-family: 'Patrick Hand', cursive;
-    font-size: 21px;
+    font-size: 13.13px;
     color: #111111;
     text-align: left;
     text-transform: uppercase;
     letter-spacing: 0.75px;
     word-wrap: break-word;
     overflow: hidden;
-    max-height: 40px;
+    max-height: 25px;
     line-height: 1.2;
 }
 
