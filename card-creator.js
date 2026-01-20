@@ -150,24 +150,7 @@ class CardCreator {
                 sourceY = (imgHeight - imgWidth) / 2;
             }
 
-            // Optional: subtle rounded corners (8px)
-            this.ctx.beginPath();
-            const x = this.photoPosition.x;
-            const y = this.photoPosition.y;
-            const radius = 8;
-            this.ctx.moveTo(x + radius, y);
-            this.ctx.lineTo(x + size - radius, y);
-            this.ctx.quadraticCurveTo(x + size, y, x + size, y + radius);
-            this.ctx.lineTo(x + size, y + size - radius);
-            this.ctx.quadraticCurveTo(x + size, y + size, x + size - radius, y + size);
-            this.ctx.lineTo(x + radius, y + size);
-            this.ctx.quadraticCurveTo(x, y + size, x, y + size - radius);
-            this.ctx.lineTo(x, y + radius);
-            this.ctx.quadraticCurveTo(x, y, x + radius, y);
-            this.ctx.closePath();
-            this.ctx.clip();
-
-            // Draw center-cropped square image
+            // Draw center-cropped square image (no clipping, perfect fit)
             this.ctx.drawImage(
                 this.userImage,
                 sourceX, sourceY, sourceSize, sourceSize,
@@ -188,7 +171,7 @@ class CardCreator {
             this.ctx.font = `${fontSize}px 'Permanent Marker', cursive`;
             this.ctx.fillStyle = this.namePosition.color;
             this.ctx.textAlign = 'left';
-            this.ctx.textBaseline = 'alphabetic';
+            this.ctx.textBaseline = 'bottom';
             
             // Letter spacing
             this.ctx.letterSpacing = `${this.namePosition.letterSpacing}px`;
