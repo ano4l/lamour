@@ -10,7 +10,7 @@
     <title>L'amour - Valentine's Event 2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Bebas+Neue&family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Bebas+Neue&family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -137,6 +137,50 @@
         </div>
     </section>
 
+    <!-- ID Card Creator Section -->
+    <section class="card-creator-section" id="cardCreator">
+        <div class="card-creator-container">
+            <h2 class="card-creator-title">🎫 Create Your ID Card</h2>
+            <p class="card-creator-subtitle">Design your exclusive L'amour Experience ID card</p>
+            
+            <div class="card-creator-layout">
+                <!-- Canvas Preview -->
+                <div class="card-preview">
+                    <canvas id="cardCanvas"></canvas>
+                </div>
+                
+                <!-- Controls Panel -->
+                <div class="card-controls">
+                    <div class="control-group">
+                        <label for="nameInput" class="control-label">Your Name</label>
+                        <input 
+                            type="text" 
+                            id="nameInput" 
+                            class="control-input"
+                            placeholder="Enter your name (max 24 chars)"
+                            maxlength="24"
+                        />
+                        <span class="control-hint">Will appear in uppercase on your card</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label">Your Photo</label>
+                        <input type="file" id="photoUpload" accept="image/*" style="display: none;" />
+                        <button type="button" id="uploadPhotoBtn" class="btn-upload">
+                            📸 Upload Photo
+                        </button>
+                        <span class="control-hint">Square photos work best</span>
+                    </div>
+                    
+                    <div class="control-actions">
+                        <button type="button" id="resetCard" class="btn-reset">Reset</button>
+                        <button type="button" id="downloadCard" class="btn-download">Download Card</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <script>
         // Inline countdown timer to ensure it works
         function startCountdown() {
@@ -240,5 +284,16 @@
         }
     </script>
     <script src="app-supabase.js"></script>
+    <script src="card-creator.js"></script>
+    <script>
+        // Initialize card creator when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                new CardCreator();
+            });
+        } else {
+            new CardCreator();
+        }
+    </script>
 </body>
 </html>

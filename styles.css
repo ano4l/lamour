@@ -775,6 +775,237 @@ body {
 }
 
 /* ===================================
+   ID CARD CREATOR SECTION
+   =================================== */
+.card-creator-section {
+    min-height: 100vh;
+    background: var(--gradient-bg);
+    padding: 4rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-creator-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.card-creator-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    color: var(--color-black);
+    text-align: center;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+}
+
+.card-creator-subtitle {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    color: rgba(0, 0, 0, 0.7);
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.card-creator-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 3rem;
+    align-items: start;
+}
+
+/* Canvas Preview */
+.card-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+#cardCanvas {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Controls Panel */
+.card-controls {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.control-label {
+    font-family: var(--font-bold);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-black);
+}
+
+.control-input {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--color-black);
+    transition: all 0.3s ease;
+}
+
+.control-input:focus {
+    outline: none;
+    border-color: var(--color-red);
+    box-shadow: 0 4px 12px rgba(220, 20, 60, 0.2);
+}
+
+.control-hint {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.5);
+    font-style: italic;
+}
+
+.btn-upload {
+    width: 100%;
+    padding: 1rem;
+    background: var(--color-red);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: var(--font-bold);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-upload:hover {
+    background: var(--color-dark-red);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(220, 20, 60, 0.3);
+}
+
+.control-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-reset,
+.btn-download {
+    padding: 1rem;
+    border: none;
+    border-radius: 12px;
+    font-family: var(--font-bold);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-reset {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--color-black);
+}
+
+.btn-reset:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.btn-download {
+    background: var(--color-red);
+    color: white;
+}
+
+.btn-download:hover {
+    background: var(--color-dark-red);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(220, 20, 60, 0.3);
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+    .card-creator-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .card-preview {
+        order: 1;
+    }
+    
+    .card-controls {
+        order: 2;
+        max-width: 500px;
+        margin: 0 auto;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .card-creator-section {
+        padding: 3rem 1.5rem;
+    }
+    
+    .card-creator-title {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+    
+    .card-preview {
+        padding: 1.5rem;
+    }
+    
+    .card-controls {
+        padding: 1.5rem;
+    }
+    
+    #cardCanvas {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-creator-section {
+        padding: 2rem 1rem;
+    }
+    
+    .control-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===================================
    RED FLAGS SECTION
    =================================== */
 .redflags-section {
