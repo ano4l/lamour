@@ -889,6 +889,69 @@ body {
     font-style: italic;
 }
 
+/* Photo Position Controls */
+.photo-position-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.position-row {
+    display: flex;
+    gap: 3rem;
+}
+
+.btn-position {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-position:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}
+
+.btn-position:active {
+    transform: scale(0.95);
+}
+
+.zoom-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.btn-zoom {
+    flex: 1;
+    padding: 0.75rem;
+    background: var(--color-red);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-bold);
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-zoom:hover {
+    background: var(--color-dark-red);
+    transform: translateY(-2px);
+}
+
 .btn-upload {
     width: 100%;
     padding: 1rem;

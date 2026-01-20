@@ -10,7 +10,7 @@
     <title>L'amour - Valentine's Event 2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Bebas+Neue&family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Bebas+Neue&family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Patrick+Hand&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -163,6 +163,19 @@
                         <span class="control-hint">Will appear in uppercase on your card</span>
                     </div>
                     
+                    <div class="control-group" id="nameControls" style="display: none;">
+                        <label class="control-label">Adjust Name Position</label>
+                        <div class="photo-position-grid">
+                            <button type="button" id="moveNameUp" class="btn-position">↑</button>
+                            <div class="position-row">
+                                <button type="button" id="moveNameLeft" class="btn-position">←</button>
+                                <button type="button" id="moveNameRight" class="btn-position">→</button>
+                            </div>
+                            <button type="button" id="moveNameDown" class="btn-position">↓</button>
+                        </div>
+                        <span class="control-hint">Fine-tune name placement (5px per click)</span>
+                    </div>
+                    
                     <div class="control-group">
                         <label class="control-label">Your Photo</label>
                         <input type="file" id="photoUpload" accept="image/*" style="display: none;" />
@@ -170,6 +183,23 @@
                             📸 Upload Photo
                         </button>
                         <span class="control-hint">Square photos work best</span>
+                    </div>
+                    
+                    <div class="control-group" id="photoControls" style="display: none;">
+                        <label class="control-label">Adjust Photo Position</label>
+                        <div class="photo-position-grid">
+                            <button type="button" id="movePhotoUp" class="btn-position">↑</button>
+                            <div class="position-row">
+                                <button type="button" id="movePhotoLeft" class="btn-position">←</button>
+                                <button type="button" id="movePhotoRight" class="btn-position">→</button>
+                            </div>
+                            <button type="button" id="movePhotoDown" class="btn-position">↓</button>
+                        </div>
+                        <div class="zoom-controls">
+                            <button type="button" id="zoomOut" class="btn-zoom">🔍−</button>
+                            <button type="button" id="zoomIn" class="btn-zoom">🔍+</button>
+                        </div>
+                        <span class="control-hint">Use arrows to reposition, zoom to resize</span>
                     </div>
                     
                     <div class="control-actions">
@@ -284,7 +314,7 @@
         }
     </script>
     <script src="app-supabase.js"></script>
-    <script src="card-creator.js?v=20260120"></script>
+    <script src="card-creator.js?v=20260120-3"></script>
     <script>
         // Initialize card creator when DOM is ready
         if (document.readyState === 'loading') {

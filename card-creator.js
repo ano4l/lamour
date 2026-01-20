@@ -12,6 +12,15 @@ class CardCreator {
         this.userImage = null;
         this.userName = '';
         
+        // Photo adjustment controls
+        this.photoOffsetX = 0;
+        this.photoOffsetY = 0;
+        this.photoZoom = 1.0;
+        
+        // Name adjustment controls
+        this.nameOffsetX = 0;
+        this.nameOffsetY = 0;
+        
         // Canvas dimensions: 1024 x 1536
         this.canvas.width = 1024;
         this.canvas.height = 1536;
@@ -29,7 +38,7 @@ class CardCreator {
             y: 1060,
             maxWidth: 440,
             fontSize: 42,
-            font: "42px 'Permanent Marker', cursive",
+            font: "42px 'Patrick Hand', cursive",
             color: '#111111',
             letterSpacing: 1.5
         };
@@ -58,6 +67,13 @@ class CardCreator {
                 this.userName = e.target.value.slice(0, 24);
                 nameInput.value = this.userName;
                 this.renderCard();
+                // Show name adjustment controls when user enters name
+                const nameControls = document.getElementById('nameControls');
+                if (nameControls && this.userName.length > 0) {
+                    nameControls.style.display = 'flex';
+                } else if (nameControls && this.userName.length === 0) {
+                    nameControls.style.display = 'none';
+                }
             });
         }
 
@@ -85,6 +101,32 @@ class CardCreator {
                 this.resetCard();
             });
         }
+        
+        // Photo position controls
+        const moveUpBtn = document.getElementById('movePhotoUp');
+        const moveDownBtn = document.getElementById('movePhotoDown');
+        const moveLeftBtn = document.getElementById('movePhotoLeft');
+        const moveRightBtn = document.getElementById('movePhotoRight');
+        const zoomInBtn = document.getElementById('zoomIn');
+        const zoomOutBtn = document.getElementById('zoomOut');
+        
+        if (moveUpBtn) moveUpBtn.addEventListener('click', () => { this.photoOffsetY -= 20; this.renderCard(); });
+        if (moveDownBtn) moveDownBtn.addEventListener('click', () => { this.photoOffsetY += 20; this.renderCard(); });
+        if (moveLeftBtn) moveLeftBtn.addEventListener('click', () => { this.photoOffsetX -= 20; this.renderCard(); });
+        if (moveRightBtn) moveRightBtn.addEventListener('click', () => { this.photoOffsetX += 20; this.renderCard(); });
+        if (zoomInBtn) zoomInBtn.addEventListener('click', () => { this.photoZoom = Math.min(this.photoZoom + 0.1, 3.0); this.renderCard(); });
+        if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => { this.photoZoom = Math.max(this.photoZoom - 0.1, 0.5); this.renderCard(); });
+        
+        // Name position controls
+        const moveNameUpBtn = document.getElementById('moveNameUp');
+        const moveNameDownBtn = document.getElementById('moveNameDown');
+        const moveNameLeftBtn = document.getElementById('moveNameLeft');
+        const moveNameRightBtn = document.getElementById('moveNameRight');
+        
+        if (moveNameUpBtn) moveNameUpBtn.addEventListener('click', () => { this.nameOffsetY -= 5; this.renderCard(); });
+        if (moveNameDownBtn) moveNameDownBtn.addEventListener('click', () => { this.nameOffsetY += 5; this.renderCard(); });
+        if (moveNameLeftBtn) moveNameLeftBtn.addEventListener('click', () => { this.nameOffsetX -= 5; this.renderCard(); });
+        if (moveNameRightBtn) moveNameRightBtn.addEventListener('click', () => { this.nameOffsetX += 5; this.renderCard(); });
 
         // Download button
         const downloadBtn = document.getElementById('downloadCard');
@@ -102,6 +144,9 @@ class CardCreator {
             img.onload = () => {
                 this.userImage = img;
                 this.renderCard();
+                // Show photo adjustment controls
+                const photoControls = document.getElementById('photoControls');
+                if (photoControls) photoControls.style.display = 'flex';
             };
             img.src = e.target.result;
         };
@@ -150,10 +195,15 @@ class CardCreator {
                 sourceY = (imgHeight - imgWidth) / 2;
             }
 
-            // Draw center-cropped square image (no clipping, perfect fit)
+            // Apply zoom and offset adjustments
+            const zoomedSize = sourceSize / this.photoZoom;
+            const adjustedSourceX = sourceX + (sourceSize - zoomedSize) / 2 + this.photoOffsetX;
+            const adjustedSourceY = sourceY + (sourceSize - zoomedSize) / 2 + this.photoOffsetY;
+            
+            // Draw center-cropped square image with user adjustments
             this.ctx.drawImage(
                 this.userImage,
-                sourceX, sourceY, sourceSize, sourceSize,
+                adjustedSourceX, adjustedSourceY, zoomedSize, zoomedSize,
                 this.photoPosition.x, this.photoPosition.y, size, size
             );
 
@@ -166,9 +216,9 @@ class CardCreator {
             
             const upperName = this.userName.toUpperCase();
             
-            // Font styling: Permanent Marker, 42px, #111
+            // Font styling: Patrick Hand, 42px, #111
             let fontSize = this.namePosition.fontSize;
-            this.ctx.font = `${fontSize}px 'Permanent Marker', cursive`;
+            this.ctx.font = `${fontSize}px 'Patrick Hand', cursive`;
             this.ctx.fillStyle = this.namePosition.color;
             this.ctx.textAlign = 'left';
             this.ctx.textBaseline = 'bottom';
@@ -180,12 +230,12 @@ class CardCreator {
             let textWidth = this.ctx.measureText(upperName).width;
             while (textWidth > this.namePosition.maxWidth && fontSize > 20) {
                 fontSize -= 2;
-                this.ctx.font = `${fontSize}px 'Permanent Marker', cursive`;
+                this.ctx.font = `${fontSize}px 'Patrick Hand', cursive`;
                 textWidth = this.ctx.measureText(upperName).width;
             }
             
-            // Draw text at exact position (310, 1060)
-            this.ctx.fillText(upperName, this.namePosition.x, this.namePosition.y);
+            // Draw text at position with user adjustments
+            this.ctx.fillText(upperName, this.namePosition.x + this.nameOffsetX, this.namePosition.y + this.nameOffsetY);
             
             this.ctx.restore();
         }
@@ -194,10 +244,19 @@ class CardCreator {
     resetCard() {
         this.userName = '';
         this.userImage = null;
+        this.photoOffsetX = 0;
+        this.photoOffsetY = 0;
+        this.photoZoom = 1.0;
+        this.nameOffsetX = 0;
+        this.nameOffsetY = 0;
         const nameInput = document.getElementById('nameInput');
         const photoInput = document.getElementById('photoUpload');
         if (nameInput) nameInput.value = '';
         if (photoInput) photoInput.value = '';
+        const photoControls = document.getElementById('photoControls');
+        const nameControls = document.getElementById('nameControls');
+        if (photoControls) photoControls.style.display = 'none';
+        if (nameControls) nameControls.style.display = 'none';
         this.renderCard();
     }
 
