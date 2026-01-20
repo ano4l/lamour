@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "fabric": "^7.1.0",
+    "html2canvas": "^1.4.1"
+  }
+}

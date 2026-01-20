@@ -1,91 +1,57 @@
 /**
  * L'AMOUR - ID Card Generator
- * Canvas-based ID card with locked template
+ * HTML/CSS Overlay + html2canvas approach
  * 
- * FIXED POSITIONS (no user adjustment):
- * - Photo: 360x360px square at (332, 365)
- * - Name: Left-aligned at (310, 1040), max width 440px
+ * FIXED POSITIONS (scaled to 512x768 display):
+ * - Photo: 180x180px at (166px, 182.5px)
+ * - Name: Left-aligned at (155px, 520px)
  * 
- * Canvas: 1024 x 1536 pixels
- * Template: frame.jpg
+ * Template: frame.jpg (1024x1536 original, displayed at 512x768)
  */
 
 class CardCreator {
     constructor() {
-        this.canvas = document.getElementById('cardCanvas');
-        if (!this.canvas) {
-            console.error('CardCreator: Canvas element #cardCanvas not found');
+        this.cardContainer = document.getElementById('cardContainer');
+        this.cardTemplate = document.getElementById('cardTemplate');
+        this.cardPhoto = document.getElementById('cardPhoto');
+        this.cardName = document.getElementById('cardName');
+        this.nameInput = document.getElementById('nameInput');
+        this.photoUpload = document.getElementById('photoUpload');
+        this.uploadBtn = document.getElementById('uploadPhotoBtn');
+        this.resetBtn = document.getElementById('resetCard');
+        this.downloadBtn = document.getElementById('downloadCard');
+        
+        this.userName = '';
+        this.userImageData = null;
+        
+        if (!this.cardContainer) {
+            console.error('CardCreator: Card container not found');
             return;
         }
-        
-        this.ctx = this.canvas.getContext('2d');
-        this.templateImage = new Image();
-        this.userImage = null;
-        this.userName = '';
-        this.templateLoaded = false;
-        
-        // Fixed canvas dimensions
-        this.CANVAS_WIDTH = 1024;
-        this.CANVAS_HEIGHT = 1536;
-        
-        // Fixed photo position and size (the empty box in the template)
-        this.PHOTO_X = 332;
-        this.PHOTO_Y = 365;
-        this.PHOTO_SIZE = 360;
-        
-        // Fixed name text position (next to NAME: label)
-        this.NAME_X = 310;
-        this.NAME_Y = 1040;
-        this.NAME_MAX_WIDTH = 440;
-        this.NAME_FONT_SIZE = 42;
-        this.NAME_FONT = "'Patrick Hand', cursive";
-        this.NAME_COLOR = '#111111';
         
         this.init();
     }
 
     init() {
-        // Set canvas dimensions
-        this.canvas.width = this.CANVAS_WIDTH;
-        this.canvas.height = this.CANVAS_HEIGHT;
-        
-        // Load the template image
-        this.templateImage.crossOrigin = 'anonymous';
-        
-        this.templateImage.onload = () => {
-            this.templateLoaded = true;
-            this.render();
-        };
-        
-        this.templateImage.onerror = () => {
-            console.error('CardCreator: Failed to load template image frame.jpg');
-            this.renderPlaceholder();
-        };
-        
-        this.templateImage.src = 'frame.jpg';
-        
         this.setupEventListeners();
     }
 
     setupEventListeners() {
         // Name input
-        const nameInput = document.getElementById('nameInput');
-        if (nameInput) {
-            nameInput.addEventListener('input', (e) => {
+        if (this.nameInput) {
+            this.nameInput.addEventListener('input', (e) => {
                 this.userName = e.target.value.slice(0, 24);
-                nameInput.value = this.userName;
-                this.render();
+                this.updateCard();
             });
         }
 
-        // Photo upload button
-        const uploadBtn = document.getElementById('uploadPhotoBtn');
-        const fileInput = document.getElementById('photoUpload');
-        
-        if (uploadBtn && fileInput) {
-            uploadBtn.addEventListener('click', () => fileInput.click());
-            
-            fileInput.addEventListener('change', (e) => {
+        // Photo upload
+        if (this.uploadBtn && this.photoUpload) {
+            this.uploadBtn.addEventListener('click', () => {
+                this.photoUpload.click();
+            });
+
+            this.photoUpload.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file && file.type.startsWith('image/')) {
                     this.loadUserImage(file);
@@ -94,166 +60,98 @@ class CardCreator {
         }
 
         // Reset button
-        const resetBtn = document.getElementById('resetCard');
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => this.reset());
+        if (this.resetBtn) {
+            this.resetBtn.addEventListener('click', () => this.reset());
         }
 
         // Download button
-        const downloadBtn = document.getElementById('downloadCard');
-        if (downloadBtn) {
-            downloadBtn.addEventListener('click', () => this.download());
+        if (this.downloadBtn) {
+            this.downloadBtn.addEventListener('click', () => this.download());
         }
     }
 
     loadUserImage(file) {
         const reader = new FileReader();
-        
+
         reader.onload = (e) => {
             const img = new Image();
-            
+
             img.onload = () => {
-                this.userImage = img;
-                this.render();
+                // Center-crop the image to square
+                const croppedCanvas = this.centerCropImage(img);
+                this.userImageData = croppedCanvas.toDataURL('image/png');
+                this.updateCard();
             };
-            
-            img.onerror = () => {
-                console.error('CardCreator: Failed to load user image');
-            };
-            
+
             img.src = e.target.result;
         };
-        
-        reader.onerror = () => {
-            console.error('CardCreator: Failed to read file');
-        };
-        
+
         reader.readAsDataURL(file);
     }
 
-    renderPlaceholder() {
-        this.ctx.fillStyle = '#F5F5F5';
-        this.ctx.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+    centerCropImage(img) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
         
-        this.ctx.fillStyle = '#999';
-        this.ctx.font = '24px sans-serif';
-        this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
-        this.ctx.fillText('Loading template...', this.CANVAS_WIDTH / 2, this.CANVAS_HEIGHT / 2);
+        const size = Math.min(img.width, img.height);
+        canvas.width = size;
+        canvas.height = size;
+
+        const x = (img.width - size) / 2;
+        const y = (img.height - size) / 2;
+
+        ctx.drawImage(img, x, y, size, size, 0, 0, size, size);
+        return canvas;
     }
 
-    render() {
-        // Clear canvas
-        this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
-
-        // Step 1: Draw template background
-        if (this.templateLoaded && this.templateImage.complete) {
-            this.ctx.drawImage(
-                this.templateImage,
-                0, 0,
-                this.CANVAS_WIDTH, this.CANVAS_HEIGHT
-            );
-        } else {
-            this.renderPlaceholder();
-            return;
+    updateCard() {
+        // Update name
+        if (this.cardName) {
+            this.cardName.textContent = this.userName.toUpperCase();
         }
 
-        // Step 2: Draw user photo in the fixed photo box
-        if (this.userImage) {
-            this.drawPhoto();
+        // Update photo
+        if (this.userImageData && this.cardPhoto) {
+            this.cardPhoto.src = this.userImageData;
+            this.cardPhoto.style.display = 'block';
         }
-
-        // Step 3: Draw user name at the fixed position
-        if (this.userName.trim()) {
-            this.drawName();
-        }
-    }
-
-    drawPhoto() {
-        const img = this.userImage;
-        const imgW = img.width;
-        const imgH = img.height;
-        
-        // Calculate center-crop coordinates
-        // We want to extract a square from the center of the image
-        let srcX, srcY, srcSize;
-        
-        if (imgW > imgH) {
-            // Landscape image: crop from center horizontally
-            srcSize = imgH;
-            srcX = (imgW - imgH) / 2;
-            srcY = 0;
-        } else if (imgH > imgW) {
-            // Portrait image: crop from center vertically
-            srcSize = imgW;
-            srcX = 0;
-            srcY = (imgH - imgW) / 2;
-        } else {
-            // Square image: use as-is
-            srcSize = imgW;
-            srcX = 0;
-            srcY = 0;
-        }
-        
-        // Draw the center-cropped square into the fixed photo box
-        this.ctx.drawImage(
-            img,
-            srcX, srcY, srcSize, srcSize,           // Source: center square
-            this.PHOTO_X, this.PHOTO_Y,              // Destination: fixed position
-            this.PHOTO_SIZE, this.PHOTO_SIZE         // Destination: fixed size
-        );
-    }
-
-    drawName() {
-        const name = this.userName.toUpperCase();
-        
-        this.ctx.save();
-        
-        // Set text properties
-        let fontSize = this.NAME_FONT_SIZE;
-        this.ctx.font = `${fontSize}px ${this.NAME_FONT}`;
-        this.ctx.fillStyle = this.NAME_COLOR;
-        this.ctx.textAlign = 'left';
-        this.ctx.textBaseline = 'alphabetic';
-        
-        // Reduce font size if text is too wide
-        let textWidth = this.ctx.measureText(name).width;
-        while (textWidth > this.NAME_MAX_WIDTH && fontSize > 18) {
-            fontSize -= 2;
-            this.ctx.font = `${fontSize}px ${this.NAME_FONT}`;
-            textWidth = this.ctx.measureText(name).width;
-        }
-        
-        // Draw the name at the fixed position
-        this.ctx.fillText(name, this.NAME_X, this.NAME_Y);
-        
-        this.ctx.restore();
     }
 
     reset() {
         this.userName = '';
-        this.userImage = null;
-        
-        const nameInput = document.getElementById('nameInput');
-        const photoInput = document.getElementById('photoUpload');
-        
-        if (nameInput) nameInput.value = '';
-        if (photoInput) photoInput.value = '';
-        
-        this.render();
+        this.userImageData = null;
+
+        if (this.nameInput) this.nameInput.value = '';
+        if (this.photoUpload) this.photoUpload.value = '';
+        if (this.cardPhoto) this.cardPhoto.style.display = 'none';
+        if (this.cardName) this.cardName.textContent = '';
     }
 
-    download() {
-        const link = document.createElement('a');
-        const safeName = this.userName
-            .toLowerCase()
-            .replace(/[^a-z0-9]/g, '-')
-            .replace(/-+/g, '-')
-            .replace(/^-|-$/g, '') || 'guest';
-        
-        link.download = `lamour-experience-${safeName}.png`;
-        link.href = this.canvas.toDataURL('image/png');
-        link.click();
+    async download() {
+        try {
+            const element = this.cardContainer;
+            const canvas = await html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null,
+                logging: false
+            });
+
+            const link = document.createElement('a');
+            const safeName = this.userName
+                .toLowerCase()
+                .replace(/[^a-z0-9]/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '') || 'guest';
+
+            link.download = `lamour-experience-${safeName}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        } catch (error) {
+            console.error('CardCreator: Failed to download card', error);
+            alert('Failed to download card. Please try again.');
+        }
     }
 }
 
