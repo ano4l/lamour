@@ -19,14 +19,14 @@ class CardCreator {
         // Photo position (square, center-cropped)
         this.photoPosition = {
             x: 332,
-            y: 365,
+            y: 385,
             size: 360
         };
         
         // Name text position
         this.namePosition = {
             x: 310,
-            y: 1040,
+            y: 1060,
             maxWidth: 440,
             fontSize: 42,
             font: "42px 'Permanent Marker', cursive",
@@ -127,7 +127,7 @@ class CardCreator {
             this.ctx.fillText('Loading template...', this.canvas.width / 2, this.canvas.height / 2);
         }
 
-        // Draw user photo (360x360 square at 332, 365)
+        // Draw user photo (360x360 square at 332, 385)
         if (this.userImage) {
             this.ctx.save();
             
@@ -184,7 +184,7 @@ class CardCreator {
                 textWidth = this.ctx.measureText(upperName).width;
             }
             
-            // Draw text at exact position (310, 1040)
+            // Draw text at exact position (310, 1060)
             this.ctx.fillText(upperName, this.namePosition.x, this.namePosition.y);
             
             this.ctx.restore();
