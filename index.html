@@ -163,43 +163,13 @@
                         <span class="control-hint">Will appear in uppercase on your card</span>
                     </div>
                     
-                    <div class="control-group" id="nameControls" style="display: none;">
-                        <label class="control-label">Adjust Name Position</label>
-                        <div class="photo-position-grid">
-                            <button type="button" id="moveNameUp" class="btn-position">↑</button>
-                            <div class="position-row">
-                                <button type="button" id="moveNameLeft" class="btn-position">←</button>
-                                <button type="button" id="moveNameRight" class="btn-position">→</button>
-                            </div>
-                            <button type="button" id="moveNameDown" class="btn-position">↓</button>
-                        </div>
-                        <span class="control-hint">Fine-tune name placement (5px per click)</span>
-                    </div>
-                    
                     <div class="control-group">
                         <label class="control-label">Your Photo</label>
                         <input type="file" id="photoUpload" accept="image/*" style="display: none;" />
                         <button type="button" id="uploadPhotoBtn" class="btn-upload">
                             📸 Upload Photo
                         </button>
-                        <span class="control-hint">Square photos work best</span>
-                    </div>
-                    
-                    <div class="control-group" id="photoControls" style="display: none;">
-                        <label class="control-label">Adjust Photo Position</label>
-                        <div class="photo-position-grid">
-                            <button type="button" id="movePhotoUp" class="btn-position">↑</button>
-                            <div class="position-row">
-                                <button type="button" id="movePhotoLeft" class="btn-position">←</button>
-                                <button type="button" id="movePhotoRight" class="btn-position">→</button>
-                            </div>
-                            <button type="button" id="movePhotoDown" class="btn-position">↓</button>
-                        </div>
-                        <div class="zoom-controls">
-                            <button type="button" id="zoomOut" class="btn-zoom">🔍−</button>
-                            <button type="button" id="zoomIn" class="btn-zoom">🔍+</button>
-                        </div>
-                        <span class="control-hint">Use arrows to reposition, zoom to resize</span>
+                        <span class="control-hint">Photo will be center-cropped to fit</span>
                     </div>
                     
                     <div class="control-actions">
@@ -314,7 +284,7 @@
         }
     </script>
     <script src="app-supabase.js"></script>
-    <script src="card-creator.js?v=20260120-3"></script>
+    <script src="card-creator.js?v=20260120-4"></script>
     <script>
         // Initialize card creator when DOM is ready
         if (document.readyState === 'loading') {
