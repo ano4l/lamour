@@ -853,7 +853,7 @@ body {
 .card-photo {
     position: absolute;
     left: 166px;
-    top: 257.5px;
+    top: 297.5px;
     width: 180px;
     height: 180px;
     object-fit: cover;
@@ -863,7 +863,7 @@ body {
 .card-name {
     position: absolute;
     left: 155px;
-    top: 570px;
+    top: 595px;
     width: 220px;
     font-family: 'Patrick Hand', cursive;
     font-size: 21px;
